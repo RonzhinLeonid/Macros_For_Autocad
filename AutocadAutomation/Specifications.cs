@@ -25,16 +25,29 @@ namespace AutocadAutomation
             Database db = adoc.Database;
             Editor ed = adoc.Editor;
 
-            var tableListComponents = new TableListComponents(db);
-            var blockForListComponents = tableListComponents.BlockForListComponents;
+            var tableListComponents = new TableListComponents(db); //объекс со списком блоков для табицы компонентов
+            //var blockForListComponents = tableListComponents.BlockForListComponents;
 
-            var listComponents = tableListComponents.GetTableListComponents();
+            tableListComponents.GetTableListComponents();
+            var listComponents = tableListComponents.ListStringTableListComponents;
 
             //List<BlockForListComponents> blockForListComponents = HetListBlockForTableComponents(db);
+            Point3d point;
+            var po = new PromptPointOptions("\nУкажите точку вставки таблицы.") { AllowNone = false };
+            var r = ed.GetPoint(po);
+            if (r.Status == PromptStatus.OK)
+                point = r.Value;
+            else if (r.Status == PromptStatus.Cancel)
+                {
+                    return;
+                }
+            else
+                return;
 
-            Document doc = Application.DocumentManager.MdiActiveDocument;
+
+            //Document doc = Application.DocumentManager.MdiActiveDocument;
             //Database db = doc.Database;
-            using (doc.LockDocument())
+            using (adoc.LockDocument())
             {
                 using (Transaction tr = db.TransactionManager.StartTransaction())
                 {
@@ -52,7 +65,8 @@ namespace AutocadAutomation
                         Table tableInstance = new Table();
                         tableInstance.CopyFrom(template, TableCopyOptions.FillTarget);
                         tableInstance.GenerateLayout();
-                        tableInstance.Position = new Point3d(500, 500, 0);
+                        //tableInstance.Position = new Point3d(500, 500, 0);
+                        tableInstance.Position = point;
                         BlockTable bt = tr.GetObject( db.BlockTableId, OpenMode.ForRead)  as BlockTable;
                         BlockTableRecord modelSpace = tr.GetObject(bt[BlockTableRecord.ModelSpace],OpenMode.ForWrite) as BlockTableRecord;
                         modelSpace.AppendEntity(tableInstance);
@@ -79,8 +93,8 @@ namespace AutocadAutomation
                         }
                         tr.Commit();
                     }
-                    Object acadObject = MgdAcApplication.AcadApplication;
-                    acadObject.GetType().InvokeMember("ZoomExtents", BindingFlags.InvokeMethod, null, acadObject, null);
+                    //Object acadObject = MgdAcApplication.AcadApplication;
+                    //acadObject.GetType().InvokeMember("ZoomExtents", BindingFlags.InvokeMethod, null, acadObject, null);
                 }
             }
         }

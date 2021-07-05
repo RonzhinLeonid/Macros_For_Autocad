@@ -48,12 +48,12 @@ namespace AutocadAutomation.BlocksClass
                 _note = value;
             }
         }
-        public BlockForListComponents(ObjectId objectId, 
+        public BlockForListComponents(ObjectId idBlock, 
                                         string tag, 
                                         string posItem, 
                                         string description, 
                                         string note, 
-                                        string inSpecification) : base(objectId, tag, inSpecification)
+                                        string inSpecification) : base(idBlock, tag, inSpecification)
         {
             _posItem = Convert.ToInt32(posItem);
             _description = description;

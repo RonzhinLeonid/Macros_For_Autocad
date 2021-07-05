@@ -9,20 +9,20 @@ namespace AutocadAutomation.BlocksClass
 {
     class BlockBase
     {
-        ObjectId _objectId;
+        ObjectId _idBlock;
         string _tag;
         bool _inSpecification;
 
-        public ObjectId ObjectId
+        public ObjectId IdBlock
         {
             get
             {
-                return _objectId;
+                return _idBlock;
             }
 
             set
             {
-                _objectId = value;
+                _idBlock = value;
             }
         }
         public string Tag
@@ -50,9 +50,9 @@ namespace AutocadAutomation.BlocksClass
 
             }
         }
-        public BlockBase(ObjectId objectId, string tag, string inSpecification)
+        public BlockBase(ObjectId idBlock, string tag, string inSpecification)
         {
-            _objectId = objectId;
+            _idBlock = idBlock;
             _tag = tag;
             _inSpecification = inSpecification.ToUpper() == "ДА" ? true :false;
         }

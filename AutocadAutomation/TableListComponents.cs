@@ -12,12 +12,15 @@ namespace AutocadAutomation
 {
     class TableListComponents
     {
-        List<BlockForListComponents> _blockForListComponents;
-        public List<BlockForListComponents> BlockForListComponents => _blockForListComponents;
+        List<BlockForListComponents> _listBlockForListComponents;
+        List<StringTableListComponents> _listStringTableListComponents;
+        public List<BlockForListComponents> ListBlockForListComponents => _listBlockForListComponents;
+        public List<StringTableListComponents> ListStringTableListComponents => _listStringTableListComponents;
+
 
         public TableListComponents(Database db)
         {
-            _blockForListComponents = HetListBlockForTableComponents(db);
+            _listBlockForListComponents = HetListBlockForTableComponents(db);
         }
 
         private List<BlockForListComponents> HetListBlockForTableComponents(Database db)
@@ -38,7 +41,7 @@ namespace AutocadAutomation
                             if (dictionaryElement)
                             {
                                 var dictAttr = WorkWithAttribute.GetDictionaryAttributes(attrC);
-                                blockForListComponents.Add(new BlockForListComponents(id,
+                                blockForListComponents.Add(new BlockForListComponents(  id,
                                                                                         dictAttr["TAG"],
                                                                                         dictAttr["POS_ITEM"],
                                                                                         dictAttr["DESCRIPTION"],
@@ -51,21 +54,65 @@ namespace AutocadAutomation
             }
             return blockForListComponents
                                         .OrderBy(u => u.Description)
-                                        .ThenBy(u => u.Tag)
                                         .ThenBy(u => u.Note)
+                                        .ThenBy(u => u.Tag)
                                         .ToList();
         }
-        public List<StringTableListComponents> GetTableListComponents()
+        public void GetTableListComponents()
         {
+            _listStringTableListComponents = new List<StringTableListComponents>();
+            int posItem = 1;
+            string tempDicript = "";
+            string tempNote = "";
+            foreach (var item in _listBlockForListComponents)
+            {
+                if (tempDicript != item.Description)
+                {
+                    _listStringTableListComponents.Add(new StringTableListComponents()
+                    {
+                        IdBlock = new List<ObjectId>() { item.IdBlock },
+                        PosItem = posItem,
+                        FullDescription = item.Description + " " + item.Tag,
+                        Count = 1,
+                        Note = item.Note
+                    });
+                    posItem++;
+                    tempDicript = item.Description;
+                    tempNote = item.Note;
+                }
+                else 
+                {
+                    if (tempNote == item.Note)
+                    {
+                        _listStringTableListComponents.Last().IdBlock.Add(item.IdBlock);
+                        _listStringTableListComponents.Last().FullDescription = _listStringTableListComponents.Last().FullDescription + ", " + item.Tag;
+                        _listStringTableListComponents.Last().Count++;
+                    }
+                    else
+                    {
+                        _listStringTableListComponents.Add(new StringTableListComponents()
+                        {
+                            IdBlock = new List<ObjectId>() { item.IdBlock },
+                            PosItem = posItem,
+                            FullDescription = item.Description + " " + item.Tag,
+                            Count = 1,
+                            Note = item.Note
+                        });
+                        posItem++;
+                        tempDicript = item.Description;
+                        tempNote = item.Note;
+                    }
+                }
+            }
             //List<StringTableListComponents> stringTableListComponents = new List<StringTableListComponents>();
             //var listDescription = _blockForListComponents.Select(p => p.Description).Distinct();
 
             //как то надо добавить еще note
-            var list2 = _blockForListComponents.GroupBy(g => g.Description, p => new {p.Note,  p.Tag });
+            //var list2 = _listBlockForListComponents.GroupBy(g => g.Description, p => new {p.Note,  p.Tag });
 
-            var list = _blockForListComponents.GroupBy(g => new { g.Description, g.Tag, g.Note }, p => p.Tag)
-                .Select((p, ind) => new StringTableListComponents() {PosItem = ind + 1, FullDescription = p.Key.Description + " " + string.Join(", ", p), Count = p.Count(), Note = p.Key.Note} ).ToList();
-            return list;
+           // var list = _listBlockForListComponents.GroupBy(g => new { g.Description, g.Tag, g.Note }, p => p.Tag)
+            //    .Select((p, ind) => new StringTableListComponents() {PosItem = ind + 1, FullDescription = p.Key.Description + " " + string.Join(", ", p), Count = p.Count(), Note = p.Key.Note} ).ToList();
+            //return list;
         }
     }
 }
