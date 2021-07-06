@@ -30,6 +30,7 @@ namespace AutocadAutomation
 
             tableListComponents.GetTableListComponents();
             var listComponents = tableListComponents.ListStringTableListComponents;
+            tableListComponents.SyncBlocksDrawing(db);
 
             //List<BlockForListComponents> blockForListComponents = HetListBlockForTableComponents(db);
             Point3d point;

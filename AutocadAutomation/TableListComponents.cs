@@ -1,6 +1,7 @@
 ﻿using AutocadAutomation.BlocksClass;
 using AutocadAutomation.StringTable;
 using AutocadAutomation.TypeBlocks;
+using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,6 @@ namespace AutocadAutomation
                                 var dictAttr = WorkWithAttribute.GetDictionaryAttributes(attrC);
                                 blockForListComponents.Add(new BlockForListComponents(  id,
                                                                                         dictAttr["TAG"],
-                                                                                        dictAttr["POS_ITEM"],
                                                                                         dictAttr["DESCRIPTION"],
                                                                                         dictAttr["NOTE"],
                                                                                         dictAttr["IN_SPECIFICATION"]));
@@ -66,6 +66,7 @@ namespace AutocadAutomation
             string tempNote = "";
             foreach (var item in _listBlockForListComponents)
             {
+                if (!item.InSpecification) continue;
                 if (tempDicript != item.Description)
                 {
                     _listStringTableListComponents.Add(new StringTableListComponents()
@@ -104,15 +105,29 @@ namespace AutocadAutomation
                     }
                 }
             }
-            //List<StringTableListComponents> stringTableListComponents = new List<StringTableListComponents>();
-            //var listDescription = _blockForListComponents.Select(p => p.Description).Distinct();
-
-            //как то надо добавить еще note
-            //var list2 = _listBlockForListComponents.GroupBy(g => g.Description, p => new {p.Note,  p.Tag });
-
-           // var list = _listBlockForListComponents.GroupBy(g => new { g.Description, g.Tag, g.Note }, p => p.Tag)
-            //    .Select((p, ind) => new StringTableListComponents() {PosItem = ind + 1, FullDescription = p.Key.Description + " " + string.Join(", ", p), Count = p.Count(), Note = p.Key.Note} ).ToList();
-            //return list;
+        }
+        public void SyncBlocksDrawing(Database db)
+        {
+            using (Transaction tr = db.TransactionManager.StartTransaction())
+            {
+                foreach (var stringTable in _listStringTableListComponents)
+                {
+                    foreach (var item in stringTable.IdBlock)
+                    {
+                        BlockReference selectedBlock = tr.GetObject(item, OpenMode.ForWrite) as BlockReference; // получить BlockReference
+                        AttributeCollection attrIdCollection = selectedBlock.AttributeCollection;
+                        foreach (ObjectId idAttRef in attrIdCollection)
+                        {
+                            AttributeReference att = tr.GetObject(idAttRef, OpenMode.ForWrite) as AttributeReference;
+                            if (att.Tag.ToUpper() == "POS_ITEM")
+                            {
+                                att.TextString = stringTable.PosItem.ToString();
+                            }
+                        }
+                    }
+                }
+                tr.Commit();
+            }
         }
     }
 }

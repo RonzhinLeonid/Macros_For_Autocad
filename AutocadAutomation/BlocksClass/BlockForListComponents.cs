@@ -9,7 +9,7 @@ namespace AutocadAutomation.BlocksClass
 {
     class BlockForListComponents : BlockBase
     {
-        int _posItem;
+        int _posItem = 0;
         string _description;
         string _note;
         public int PosItem
@@ -50,12 +50,10 @@ namespace AutocadAutomation.BlocksClass
         }
         public BlockForListComponents(ObjectId idBlock, 
                                         string tag, 
-                                        string posItem, 
                                         string description, 
                                         string note, 
                                         string inSpecification) : base(idBlock, tag, inSpecification)
         {
-            _posItem = Convert.ToInt32(posItem);
             _description = description;
             _note = note;
         }
