@@ -41,24 +41,40 @@
     <Reference Include="acmgd">
       <HintPath>C:\Program Files\Autodesk\AutoCAD 2019\acmgd.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlocksClass\BlockBase.cs" />
     <Compile Include="BlocksClass\BlockForListComponents.cs" />
+    <Compile Include="Data\DataTableComponent.cs" />
     <Compile Include="Specifications.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringTable\StringTableListComponents.cs" />
     <Compile Include="TableListComponents.cs" />
+    <Compile Include="Tables.cs" />
     <Compile Include="TypeBlocks\Types.cs" />
+    <Compile Include="View\ListComponents.xaml.cs">
+      <DependentUpon>ListComponents.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WorkWithAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="View\ListComponents.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,13 +11,12 @@ using System.Threading.Tasks;
 
 namespace AutocadAutomation
 {
-    class TableListComponents
+    internal class TableListComponents
     {
-        List<BlockForListComponents> _listBlockForListComponents;
-        List<StringTableListComponents> _listStringTableListComponents;
+        private List<BlockForListComponents> _listBlockForListComponents;
+        private List<StringTableListComponents> _listStringTableListComponents;
         public List<BlockForListComponents> ListBlockForListComponents => _listBlockForListComponents;
         public List<StringTableListComponents> ListStringTableListComponents => _listStringTableListComponents;
-
 
         public TableListComponents(Database db)
         {
@@ -42,7 +41,7 @@ namespace AutocadAutomation
                             if (dictionaryElement)
                             {
                                 var dictAttr = WorkWithAttribute.GetDictionaryAttributes(attrC);
-                                blockForListComponents.Add(new BlockForListComponents(  id,
+                                blockForListComponents.Add(new BlockForListComponents(id,
                                                                                         dictAttr["TAG"],
                                                                                         dictAttr["DESCRIPTION"],
                                                                                         dictAttr["NOTE"],
@@ -52,12 +51,12 @@ namespace AutocadAutomation
                     }
                 }
             }
-            return blockForListComponents
-                                        .OrderBy(u => u.Description)
-                                        .ThenBy(u => u.Note)
-                                        .ThenBy(u => u.Tag)
-                                        .ToList();
+            return blockForListComponents.OrderBy(u => u.Description)
+                                         .ThenBy(u => u.Note)
+                                         .ThenBy(u => u.Tag)
+                                         .ToList();
         }
+
         public void GetTableListComponents()
         {
             _listStringTableListComponents = new List<StringTableListComponents>();
@@ -73,7 +72,8 @@ namespace AutocadAutomation
                     {
                         IdBlock = new List<ObjectId>() { item.IdBlock },
                         PosItem = posItem,
-                        FullDescription = item.Description + " " + item.Tag,
+                        AllTag = item.Tag,
+                        FullDescription = item.Description,
                         Count = 1,
                         Note = item.Note
                     });
@@ -81,12 +81,12 @@ namespace AutocadAutomation
                     tempDicript = item.Description;
                     tempNote = item.Note;
                 }
-                else 
+                else
                 {
                     if (tempNote == item.Note)
                     {
                         _listStringTableListComponents.Last().IdBlock.Add(item.IdBlock);
-                        _listStringTableListComponents.Last().FullDescription = _listStringTableListComponents.Last().FullDescription + ", " + item.Tag;
+                        _listStringTableListComponents.Last().AllTag = _listStringTableListComponents.Last().AllTag + ", " + item.Tag;
                         _listStringTableListComponents.Last().Count++;
                     }
                     else
@@ -95,7 +95,8 @@ namespace AutocadAutomation
                         {
                             IdBlock = new List<ObjectId>() { item.IdBlock },
                             PosItem = posItem,
-                            FullDescription = item.Description + " " + item.Tag,
+                            AllTag = item.Tag,
+                            FullDescription = item.Description,
                             Count = 1,
                             Note = item.Note
                         });
@@ -106,6 +107,7 @@ namespace AutocadAutomation
                 }
             }
         }
+
         public void SyncBlocksDrawing(Database db)
         {
             using (Transaction tr = db.TransactionManager.StartTransaction())
