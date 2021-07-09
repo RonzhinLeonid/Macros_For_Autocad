@@ -7,11 +7,11 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Path=Collect}">
+        <DataGrid AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=PosItem}" Width="90" />
-                <DataGridHyperlinkColumn Header="Компания" Binding="{Binding Path=Company}" Width="80" />
-                <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="50" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Description}" Width="90" />
+                <DataGridTextColumn Header="Компания" Binding="{Binding Path=Note}" Width="80" />
+                <DataGridTextColumn Header="Цена" Binding="{Binding Path=PosItem}" Width="50" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

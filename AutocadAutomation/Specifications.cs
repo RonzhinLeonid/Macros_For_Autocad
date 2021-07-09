@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using AutocadAutomation.StringTable;
 using AutocadAutomation.Data;
+using AutocadAutomation.BlocksClass;
 
 namespace AutocadAutomation
 {
@@ -58,17 +59,17 @@ namespace AutocadAutomation
             ed = adoc.Editor;
 
             var tableListComponents = new TableListComponents(db);
-            tableListComponents.GetTableListComponents();
-            var listComponents = tableListComponents.ListStringTableListComponents;
-            if (!listComponents.Any())
+            //tableListComponents.GetTableListComponents();
+            //var listComponents = tableListComponents.ListStringTableListComponents;
+            if (!tableListComponents.ListBlockForListComponents.Any())
             {
                 MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            var dataTableComponent = new DataTableComponent() { Collect = new ObservableCollection<StringTableListComponents>() };
-            //ObservableCollection<StringTableListComponents> collection = new ObservableCollection<StringTableListComponents>(listComponents);
+            //var dataTableComponent = new DataTableComponent() { Collect = new ObservableCollection<StringTableListComponents>() };
+            var collection = new ObservableCollection<BlockForListComponents>(tableListComponents.ListBlockForListComponents);
 
-            tableListComponents.SyncBlocksDrawing(db);
+            //tableListComponents.SyncBlocksDrawing(db);
         }
     }
 }

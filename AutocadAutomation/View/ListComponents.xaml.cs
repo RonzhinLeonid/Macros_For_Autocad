@@ -23,13 +23,22 @@ namespace AutocadAutomation.View
     /// </summary>
     public partial class ListComponents : Window
     {
-        private DataTableComponent _collection;
+        private ObservableCollection<StringTableListComponents> _data;
 
-        public ListComponents(DataTableComponent collection)
+        public ListComponents(ObservableCollection<StringTableListComponents> data)
         {
             InitializeComponent();
-            _collection = collection;
-            this.DataContext = _collection;
+            _data = data;
+            this.DataContext = _data;
         }
+
+        //private DataTableComponent _data;
+
+        //public ListComponents(DataTableComponent data)
+        //{
+        //    InitializeComponent();
+        //    _data = data;
+        //    this.DataContext = _data;
+        //}
     }
 }
