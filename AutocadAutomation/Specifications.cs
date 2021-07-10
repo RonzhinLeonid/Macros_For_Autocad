@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using AutocadAutomation.StringTable;
 using AutocadAutomation.Data;
 using AutocadAutomation.BlocksClass;
+using AutocadAutomation.View;
 
 namespace AutocadAutomation
 {
@@ -68,6 +69,10 @@ namespace AutocadAutomation
             }
             //var dataTableComponent = new DataTableComponent() { Collect = new ObservableCollection<StringTableListComponents>() };
             var collection = new ObservableCollection<BlockForListComponents>(tableListComponents.ListBlockForListComponents);
+            DataTableComponent data = new DataTableComponent() { Collect = collection };
+            ListComponents window = new ListComponents(data);
+            if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
+                ;//синхронизация всех блоков
 
             //tableListComponents.SyncBlocksDrawing(db);
         }

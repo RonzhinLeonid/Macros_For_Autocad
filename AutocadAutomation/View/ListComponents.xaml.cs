@@ -1,4 +1,5 @@
-﻿using AutocadAutomation.Data;
+﻿using AutocadAutomation.BlocksClass;
+using AutocadAutomation.Data;
 using AutocadAutomation.StringTable;
 using System;
 using System.Collections.Generic;
@@ -23,22 +24,13 @@ namespace AutocadAutomation.View
     /// </summary>
     public partial class ListComponents : Window
     {
-        private ObservableCollection<StringTableListComponents> _data;
+        private DataTableComponent _data;
 
-        public ListComponents(ObservableCollection<StringTableListComponents> data)
+        public ListComponents(DataTableComponent data)
         {
             InitializeComponent();
             _data = data;
             this.DataContext = _data;
         }
-
-        //private DataTableComponent _data;
-
-        //public ListComponents(DataTableComponent data)
-        //{
-        //    InitializeComponent();
-        //    _data = data;
-        //    this.DataContext = _data;
-        //}
     }
 }

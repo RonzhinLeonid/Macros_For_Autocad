@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace AutocadAutomation.BlocksClass
 {
-    class BlockBase
+    public class BlockBase
     {
-        ObjectId _idBlock;
-        string _tag;
-        bool _inSpecification;
+        private ObjectId _idBlock;
+        private string _tag;
+        private bool _inSpecification;
 
         public ObjectId IdBlock
         {
@@ -25,6 +25,7 @@ namespace AutocadAutomation.BlocksClass
                 _idBlock = value;
             }
         }
+
         public string Tag
         {
             get
@@ -37,6 +38,7 @@ namespace AutocadAutomation.BlocksClass
                 _tag = value;
             }
         }
+
         public bool InSpecification
         {
             get
@@ -47,14 +49,14 @@ namespace AutocadAutomation.BlocksClass
             set
             {
                 _inSpecification = value;
-
             }
         }
+
         public BlockBase(ObjectId idBlock, string tag, string inSpecification)
         {
             _idBlock = idBlock;
             _tag = tag;
-            _inSpecification = inSpecification.ToUpper() == "ДА" ? true :false;
+            _inSpecification = inSpecification.ToUpper() == "ДА" ? true : false;
         }
     }
 }

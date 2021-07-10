@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace AutocadAutomation.BlocksClass
 {
-    class BlockForListComponents : BlockBase
+    public class BlockForListComponents : BlockBase
     {
-        int _posItem = 0;
-        string _description;
-        string _note;
+        private int _posItem = 0;
+        private string _description;
+        private string _note;
+
         public int PosItem
         {
             get
@@ -24,6 +25,7 @@ namespace AutocadAutomation.BlocksClass
                 _posItem = value;
             }
         }
+
         public string Description
         {
             get
@@ -36,6 +38,7 @@ namespace AutocadAutomation.BlocksClass
                 _description = value;
             }
         }
+
         public string Note
         {
             get
@@ -48,10 +51,11 @@ namespace AutocadAutomation.BlocksClass
                 _note = value;
             }
         }
-        public BlockForListComponents(ObjectId idBlock, 
-                                        string tag, 
-                                        string description, 
-                                        string note, 
+
+        public BlockForListComponents(ObjectId idBlock,
+                                        string tag,
+                                        string description,
+                                        string note,
                                         string inSpecification) : base(idBlock, tag, inSpecification)
         {
             _description = description;

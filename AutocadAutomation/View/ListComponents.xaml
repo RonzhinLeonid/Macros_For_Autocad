@@ -5,14 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:AutocadAutomation.View"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="300" d:DesignWidth="500" x:Name="TableListComponents">
     <Grid>
-        <DataGrid AutoGenerateColumns="False">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DataGrid ItemsSource="{Binding Collect}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Description}" Width="90" />
-                <DataGridTextColumn Header="Компания" Binding="{Binding Path=Note}" Width="80" />
-                <DataGridTextColumn Header="Цена" Binding="{Binding Path=PosItem}" Width="50" />
+                <DataGridTextColumn Header="Поз. обозначение" Binding="{Binding Path=Tag}" Width="90" />
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Path=Description}" Width="*" />
+                <DataGridTextColumn Header="Примечание" Binding="{Binding Path=Note}" Width="100" />
+                <DataGridCheckBoxColumn Header="Исключить" Binding="{Binding Path=InSpecification}" Width="100" />
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Height="25" HorizontalAlignment="Center">
+            <Button Content="Ок" Margin="2" Width="{Binding ElementName=btnCancel, Path=ActualWidth}" Command="{Binding OKCommand}" CommandParameter ="{Binding ElementName=TableListComponents}" />
+            <Button Name="btnCancel" Content="Отмена" Margin="2" Command="{Binding CanselCommand}" CommandParameter ="{Binding ElementName=TableListComponents}" />
+        </StackPanel>
     </Grid>
 </Window>
