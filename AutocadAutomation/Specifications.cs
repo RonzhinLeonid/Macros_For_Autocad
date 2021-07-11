@@ -37,7 +37,7 @@ namespace AutocadAutomation
                 MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            tableListComponents.SyncBlocksDrawing(db);
+            tableListComponents.SyncBlocksPosItemAttr(db);
 
             Point3d point;
             var po = new PromptPointOptions("\nУкажите точку вставки таблицы.") { AllowNone = false };
@@ -60,21 +60,16 @@ namespace AutocadAutomation
             ed = adoc.Editor;
 
             var tableListComponents = new TableListComponents(db);
-            //tableListComponents.GetTableListComponents();
-            //var listComponents = tableListComponents.ListStringTableListComponents;
             if (!tableListComponents.ListBlockForListComponents.Any())
             {
-                MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Компонентов для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            //var dataTableComponent = new DataTableComponent() { Collect = new ObservableCollection<StringTableListComponents>() };
-            var collection = new ObservableCollection<BlockForListComponents>(tableListComponents.ListBlockForListComponents);
-            DataTableComponent data = new DataTableComponent() { Collect = collection };
+            //var collection = new ObservableCollection<BlockForListComponents>(tableListComponents.ListBlockForListComponents);
+            DataTableComponent data = new DataTableComponent() { Collect = new ObservableCollection<BlockForListComponents>(tableListComponents.ListBlockForListComponents) };
             ListComponents window = new ListComponents(data);
             if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
-                ;//синхронизация всех блоков
-
-            //tableListComponents.SyncBlocksDrawing(db);
+                tableListComponents.SyncBlocksAllAttr(db, data.Collect);
         }
     }
 }

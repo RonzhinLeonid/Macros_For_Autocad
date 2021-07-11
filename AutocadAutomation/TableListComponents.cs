@@ -5,6 +5,7 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -108,7 +109,7 @@ namespace AutocadAutomation
             }
         }
 
-        public void SyncBlocksDrawing(Database db)
+        public void SyncBlocksPosItemAttr(Database db)
         {
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
@@ -130,6 +131,53 @@ namespace AutocadAutomation
                 }
                 tr.Commit();
             }
+        }
+
+        public void SyncBlocksAllAttr(Database db, ObservableCollection<BlockForListComponents> collection)
+        {
+            using (Transaction tr = db.TransactionManager.StartTransaction())
+            {
+                for (int i = 0; i < _listBlockForListComponents.Count; i++)
+                {
+                    BlockReference selectedBlock = tr.GetObject(_listBlockForListComponents[i].IdBlock, OpenMode.ForWrite) as BlockReference; // получить BlockReference
+                    AttributeCollection attrIdCollection = selectedBlock.AttributeCollection;
+                    foreach (ObjectId idAttRef in attrIdCollection)
+                    {
+                        AttributeReference att = tr.GetObject(idAttRef, OpenMode.ForWrite) as AttributeReference;
+                        switch (att.Tag.ToUpper())
+                        {
+                            case "TAG":
+                                if (att.TextString != collection[i].Tag)
+                                    att.TextString = collection[i].Tag;
+                                break;
+
+                            case "DESCRIPTION":
+                                if (att.TextString != collection[i].Description)
+                                    att.TextString = collection[i].Description;
+                                break;
+
+                            case "NOTE":
+                                if (att.TextString != collection[i].Note)
+                                    att.TextString = collection[i].Note;
+                                break;
+
+                            case "IN_SPECIFICATION":
+                                if (att.TextString != collection[i].InSpecification.ToString())
+                                    att.TextString = collection[i].InSpecification ? "Да" : "Нет";
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+                tr.Commit();
+            }
+            //component.Add("TAG", 0);
+            //component.Add("POS_ITEM", 0);
+            //component.Add("DESCRIPTION", 0);
+            //component.Add("NOTE", 0);
+            //component.Add("IN_SPECIFICATION", 0);
         }
     }
 }
