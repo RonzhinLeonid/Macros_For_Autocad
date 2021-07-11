@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.AutoCAD.DatabaseServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,28 @@ using System.Threading.Tasks;
 
 namespace AutocadAutomation.StringTable
 {
-    class StringTableListComponents
+    public class StringTableListComponents
     {
-        int _posItem;
-        string _fullDescription;
-        int _count;
-        string _note = "";
+        private List<ObjectId> _idBlock;
+        private int _posItem;
+        private string _allTag;
+        private string _fullDescription;
+        private int _count;
+        private string _note = "";
+
+        public List<ObjectId> IdBlock
+        {
+            get
+            {
+                return _idBlock;
+            }
+
+            set
+            {
+                _idBlock = value;
+            }
+        }
+
         public int PosItem
         {
             get
@@ -24,6 +41,20 @@ namespace AutocadAutomation.StringTable
                 _posItem = value;
             }
         }
+
+        public string AllTag
+        {
+            get
+            {
+                return _allTag;
+            }
+
+            set
+            {
+                _allTag = value;
+            }
+        }
+
         public string FullDescription
         {
             get
@@ -36,6 +67,7 @@ namespace AutocadAutomation.StringTable
                 _fullDescription = value;
             }
         }
+
         public int Count
         {
             get
@@ -48,6 +80,7 @@ namespace AutocadAutomation.StringTable
                 _count = value;
             }
         }
+
         public string Note
         {
             get
@@ -57,7 +90,7 @@ namespace AutocadAutomation.StringTable
 
             set
             {
-               _note = value;
+                _note = value;
             }
         }
     }
