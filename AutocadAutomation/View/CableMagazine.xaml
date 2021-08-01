@@ -9,7 +9,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <DataGrid ItemsSource="{Binding Collect}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False">
             <DataGrid.Columns>
@@ -32,6 +34,20 @@
             </DataGrid.RowStyle>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Height="25" HorizontalAlignment="Center">
+            <RadioButton Content="🡪, 🡫" GroupName="RenameCable" Margin="10,0,10,0" Command="{Binding CheckedCommand}" CommandParameter="LeftRightUpDown" />
+            <RadioButton Content="🡪, 🡩" GroupName="RenameCable" Margin="10,0,10,0" Command="{Binding CheckedCommand}" CommandParameter="LeftRightDownUp" />
+            <RadioButton Content="🡨, 🡫" GroupName="RenameCable" Margin="10,0,10,0" Command="{Binding CheckedCommand}" CommandParameter="RightLeftUpDown" />
+            <RadioButton Content="🡨, 🡩" GroupName="RenameCable" Margin="10,0,10,0" Command="{Binding CheckedCommand}" CommandParameter="RightLeftDownUp" />
+            <RadioButton Content="🡫, 🡪" GroupName="RenameCable" Margin="10,0,10,0" Command="{Binding CheckedCommand}" CommandParameter="UpDownLeftRight" />
+            <RadioButton Content="🡫, 🡨" GroupName="RenameCable" Margin="10,0,10,0" Command="{Binding CheckedCommand}" CommandParameter="UpDownRightLeft" />
+            <RadioButton Content="🡩, 🡪" GroupName="RenameCable" Margin="10,0,10,0" Command="{Binding CheckedCommand}" CommandParameter="DownUpLeftRight" />
+            <RadioButton Content="🡩, 🡨" GroupName="RenameCable" Margin="10,0,10,0" Command="{Binding CheckedCommand}" CommandParameter="DownUpRightLeft" />
+            <RadioButton Content="Без привязки к координатам" GroupName="RenameCable" Command="{Binding CheckedCommand}" CommandParameter="NonSortCoordinates" IsChecked="True" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Height="25" HorizontalAlignment="Center">
+            <Button Name="btnSort" Content="Пронумеровать кабели" Margin="2" Command="{Binding RenameCableCommand}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Height="25" HorizontalAlignment="Center">
             <Button Content="Ок" Margin="2" Width="{Binding ElementName=btnCancel, Path=ActualWidth}" Command="{Binding OKCommand}" CommandParameter ="{Binding ElementName=TableCableMagazine}" />
             <Button Name="btnCancel" Content="Отмена" Margin="2" Command="{Binding CanselCommand}" CommandParameter ="{Binding ElementName=TableCableMagazine}" />
         </StackPanel>

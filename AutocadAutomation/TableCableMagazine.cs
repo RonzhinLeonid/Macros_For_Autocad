@@ -1,4 +1,5 @@
 ﻿using AutocadAutomation.BlocksClass;
+using AutocadAutomation.Data;
 using AutocadAutomation.TypeBlocks;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
@@ -47,21 +48,17 @@ namespace AutocadAutomation
                                                                                         dictAttr["MARK_CABLE"],
                                                                                         dictAttr["CORES_CABLE"],
                                                                                         dictAttr["LENGTH"],
-                                                                                        dictAttr["IN_SPECIFICATION"]));
+                                                                                        dictAttr["IN_SPECIFICATION"],
+                                                                                        selectedBlock.Position));
                             }
                         }
                     }
                 }
             }
-            _listBlockForCableMagazine = _listBlockForCableMagazine.OrderBy(u => PadNumbers(u.Tag))
+            _listBlockForCableMagazine = _listBlockForCableMagazine.OrderBy(u => SortCable.PadNumbers(u.Tag))
                                                                             .ToList();
-            // list.OrderBy(x => int.TryParse(x, out var dummy) ? dummy.ToString("D10") : x);
-            //var result = partNumbers.OrderBy(x => PadNumbers(x));
         }
-        static string PadNumbers(string input)
-        {
-            return Regex.Replace(input, "[0-9]+", match => match.Value.PadLeft(10, '0'));
-        }
+
         public void SyncBlocksAllAttr(Database db, ObservableCollection<BlockForCableMagazine> collection)
         {
             using (Transaction tr = db.TransactionManager.StartTransaction())
