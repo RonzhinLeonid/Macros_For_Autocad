@@ -57,21 +57,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlocksClass\BlockBase.cs" />
+    <Compile Include="BlocksClass\BlockForCableMagazine.cs" />
     <Compile Include="BlocksClass\BlockForListComponents.cs" />
+    <Compile Include="Data\DataTableCableMagazine.cs" />
     <Compile Include="Data\DataTableComponent.cs" />
     <Compile Include="Data\DelegateCommand.cs" />
     <Compile Include="Specifications.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringTable\StringTableListComponents.cs" />
+    <Compile Include="TableCableMagazine.cs" />
     <Compile Include="TableListComponents.cs" />
     <Compile Include="Tables.cs" />
     <Compile Include="TypeBlocks\Types.cs" />
+    <Compile Include="View\CableMagazine.xaml.cs">
+      <DependentUpon>CableMagazine.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ListComponents.xaml.cs">
       <DependentUpon>ListComponents.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkWithAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\CableMagazine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ListComponents.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
