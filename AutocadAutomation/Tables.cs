@@ -9,12 +9,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using cad = Autodesk.AutoCAD.ApplicationServices.Application;
+using System.Globalization;
 
 namespace AutocadAutomation
 {
     internal static class Tables
     {
         private const string tableComponentStyleName = "Перечень компонентов";
+        private const string tableComponentStyleCell = "Наименование компонентов";
         private const string textStyleName = "SocTrade";
         private const int startRowTableComponents = 2;
 
@@ -27,14 +29,25 @@ namespace AutocadAutomation
                     DBDictionary dict = tr.GetObject(db.TableStyleDictionaryId, OpenMode.ForRead) as DBDictionary;
                     if (!dict.Contains(tableComponentStyleName))   //необходимо переделать проверку, если нужного шаблона нет, то запустить метод по созданию этого шаблона
                     {
-                        //CrateTableStyleTableComponents(adoc, db);
                         MessageBox.Show($"Проверьте шаблон чертежа. Стиль таблицы \"{tableComponentStyleName}\" отсутствует!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     else
                     {
                         TableStyle ts = tr.GetObject(dict.GetAt(tableComponentStyleName), OpenMode.ForRead) as TableStyle;
-                        TableTemplate template = tr.GetObject(ts.Template, OpenMode.ForRead) as TableTemplate;
+                        string[] cellStyles = ts.CellStyles.Cast<string>().ToArray();
+                        string cellStyle = cellStyles.FirstOrDefault(item => item.ToLower().Contains(tableComponentStyleCell.ToLower()));
+
+                        TableTemplate template;
+                        try
+                        {
+                            template = tr.GetObject(ts.Template, OpenMode.ForRead) as TableTemplate;
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show($"Проверьте стиль таблицы. нет привязки к таблице", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                         // Включим отображение толщин линий,
                         // дабы увидеть результат нашей работы
                         cad.SetSystemVariable("LWDISPLAY", 1);
@@ -48,6 +61,9 @@ namespace AutocadAutomation
                         BlockTableRecord modelSpace = tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
                         modelSpace.AppendEntity(tableInstance);
                         tr.AddNewlyCreatedDBObject(tableInstance, true);
+                        if (tableInstance.Rows.Count > startRowTableComponents)
+                            tableInstance.DeleteRows(startRowTableComponents, tableInstance.Rows.Count - startRowTableComponents);
+
                         tableInstance.InsertRows(startRowTableComponents, 8, listComponents.Count);
                         int row = startRowTableComponents;
                         foreach (var item in listComponents)
@@ -57,6 +73,8 @@ namespace AutocadAutomation
                             tableInstance.Cells[row, 2].TextString = item.FullDescription.ToString();
                             tableInstance.Cells[row, 3].TextString = item.Count.ToString();
                             tableInstance.Cells[row, 4].TextString = item.Note.ToString();
+                            if (!string.IsNullOrEmpty(cellStyle))
+                                tableInstance.Cells[row, 2].Style = cellStyle;
                             row++;
                         }
                         tr.Commit();
