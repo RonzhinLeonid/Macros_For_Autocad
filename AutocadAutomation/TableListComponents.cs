@@ -21,12 +21,12 @@ namespace AutocadAutomation
 
         public TableListComponents(Database db)
         {
-            _listBlockForListComponents = HetListBlockForTableComponents(db);
+            GetListBlockForTableComponents(db);
         }
 
-        private List<BlockForListComponents> HetListBlockForTableComponents(Database db)
+        private void GetListBlockForTableComponents(Database db)
         {
-            List<BlockForListComponents> blockForListComponents = new List<BlockForListComponents>();
+            _listBlockForListComponents = new List<BlockForListComponents>();
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
                 BlockTableRecord btr = (BlockTableRecord)tr.GetObject(SymbolUtilityServices.GetBlockModelSpaceId(db), OpenMode.ForRead);
@@ -42,7 +42,7 @@ namespace AutocadAutomation
                             if (dictionaryElement)
                             {
                                 var dictAttr = WorkWithAttribute.GetDictionaryAttributes(attrC);
-                                blockForListComponents.Add(new BlockForListComponents(id,
+                                _listBlockForListComponents.Add(new BlockForListComponents(id,
                                                                                         dictAttr["TAG"],
                                                                                         dictAttr["DESCRIPTION"],
                                                                                         dictAttr["NOTE"],
@@ -52,10 +52,10 @@ namespace AutocadAutomation
                     }
                 }
             }
-            return blockForListComponents.OrderBy(u => u.Description)
-                                         .ThenBy(u => u.Note)
-                                         .ThenBy(u => u.Tag)
-                                         .ToList();
+            _listBlockForListComponents = _listBlockForListComponents.OrderBy(u => u.Description)
+                                                                     .ThenBy(u => u.Note)
+                                                                     .ThenBy(u => u.Tag)
+                                                                     .ToList();
         }
 
         public void GetTableListComponents()
@@ -173,11 +173,6 @@ namespace AutocadAutomation
                 }
                 tr.Commit();
             }
-            //component.Add("TAG", 0);
-            //component.Add("POS_ITEM", 0);
-            //component.Add("DESCRIPTION", 0);
-            //component.Add("NOTE", 0);
-            //component.Add("IN_SPECIFICATION", 0);
         }
     }
 }

@@ -18,5 +18,17 @@ namespace AutocadAutomation.TypeBlocks
             component.Add("IN_SPECIFICATION", 0);
             return component;
         }
+        static public Dictionary<string, int> GetDictionaryCableMagazine()
+        {
+            var component = new Dictionary<string, int>();
+            component.Add("TAG", 0);
+            component.Add("START", 0);
+            component.Add("FINISH", 0);
+            component.Add("MARK_CABLE", 0);
+            component.Add("CORES_CABLE", 0);
+            component.Add("LENGTH", 0);
+            component.Add("IN_SPECIFICATION", 0);
+            return component;
+        }
     }
 }

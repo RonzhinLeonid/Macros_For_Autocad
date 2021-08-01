@@ -23,6 +23,7 @@ namespace AutocadAutomation
         private Database db;
         private Editor ed;
 
+        #region Таблица компонентов
         [CommandMethod("CreateTableComponents")]
         public void CreateTableComponents_Method()
         {
@@ -65,11 +66,60 @@ namespace AutocadAutomation
                 MessageBox.Show($"Компонентов для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            //var collection = new ObservableCollection<BlockForListComponents>(tableListComponents.ListBlockForListComponents);
             DataTableComponent data = new DataTableComponent() { Collect = new ObservableCollection<BlockForListComponents>(tableListComponents.ListBlockForListComponents) };
             ListComponents window = new ListComponents(data);
             if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
                 tableListComponents.SyncBlocksAllAttr(db, data.Collect);
         }
+        #endregion
+
+        #region Кабельный журнал
+        [CommandMethod("CreateTableCableMagazine")]
+        public void CreateTableCableMagazine_Method()
+        {
+            db = adoc.Database;
+            ed = adoc.Editor;
+
+            var tableCableMagazine = new TableCableMagazine(db);
+
+            var listCables = tableCableMagazine.ListBlockForCableMagazine;
+            if (!listCables.Any())
+            {
+                MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Point3d point;
+            var po = new PromptPointOptions("\nУкажите точку вставки таблицы.") { AllowNone = false };
+            var r = ed.GetPoint(po);
+            if (r.Status == PromptStatus.OK)
+                point = r.Value;
+            else if (r.Status == PromptStatus.Cancel)
+            {
+                return;
+            }
+            else
+                return;
+            Tables.CrateTableCableMagazine(adoc, db, listCables, point);
+        }
+
+        [CommandMethod("EditListCableMagazine")]
+        public void EditListCableMagazine_Method()
+        {
+            db = adoc.Database;
+            ed = adoc.Editor;
+
+            var tableCableMagazine = new TableCableMagazine(db);
+            if (!tableCableMagazine.ListBlockForCableMagazine.Any())
+            {
+                MessageBox.Show($"Кабелей для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            DataTableCableMagazine data = new DataTableCableMagazine() { Collect = new ObservableCollection<BlockForCableMagazine>(tableCableMagazine.ListBlockForCableMagazine) };
+            CableMagazine window = new CableMagazine(data);
+            if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
+                tableCableMagazine.SyncBlocksAllAttr(db, data.Collect);
+        } 
+        #endregion
     }
 }
