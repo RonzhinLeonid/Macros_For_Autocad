@@ -14,6 +14,7 @@ using AutocadAutomation.StringTable;
 using AutocadAutomation.Data;
 using AutocadAutomation.BlocksClass;
 using AutocadAutomation.View;
+using System.ComponentModel;
 
 namespace AutocadAutomation
 {

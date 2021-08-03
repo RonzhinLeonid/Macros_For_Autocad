@@ -1,5 +1,6 @@
 ﻿using AutocadAutomation.BlocksClass;
 using AutocadAutomation.Data;
+using AutocadAutomation.StringTable;
 using AutocadAutomation.TypeBlocks;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
@@ -8,9 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace AutocadAutomation
 {

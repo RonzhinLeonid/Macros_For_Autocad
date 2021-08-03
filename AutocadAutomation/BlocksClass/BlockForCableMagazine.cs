@@ -109,7 +109,7 @@ namespace AutocadAutomation.BlocksClass
             if (!rez)
             {
                 _length = 0;
-                MessageBox.Show($"Длинна кабеля {tag} не является числом!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show($"Длинна кабеля {tag} не является числом!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             _position = position;
         }
