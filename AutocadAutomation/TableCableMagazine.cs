@@ -62,9 +62,9 @@ namespace AutocadAutomation
         {
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
-                for (int i = 0; i < _listBlockForCableMagazine.Count; i++)
+                for (int i = 0; i < collection.Count; i++)
                 {
-                    BlockReference selectedBlock = tr.GetObject(_listBlockForCableMagazine[i].IdBlock, OpenMode.ForWrite) as BlockReference; // получить BlockReference
+                    BlockReference selectedBlock = tr.GetObject(collection[i].IdBlock, OpenMode.ForWrite) as BlockReference; // получить BlockReference
                     AttributeCollection attrIdCollection = selectedBlock.AttributeCollection;
                     foreach (ObjectId idAttRef in attrIdCollection)
                     {
