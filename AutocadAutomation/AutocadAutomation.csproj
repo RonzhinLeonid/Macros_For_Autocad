@@ -60,6 +60,7 @@
     <Compile Include="BlocksClass\BlockForCableMagazine.cs" />
     <Compile Include="BlocksClass\BlockForListComponents.cs" />
     <Compile Include="BlocksClass\BlockForTubeСonnections.cs" />
+    <Compile Include="BlocksClass\BlockGeneralSpecification.cs" />
     <Compile Include="Data\ComparerCoordinatesWithDelta.cs" />
     <Compile Include="Data\DataTableTubeConnections.cs" />
     <Compile Include="Data\OptionConverter.cs" />
@@ -71,8 +72,11 @@
     <Compile Include="Data\SortCable.cs" />
     <Compile Include="Specifications.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringTable\BaseStringTable.cs" />
+    <Compile Include="StringTable\StringTableGeneralSpecification.cs" />
     <Compile Include="StringTable\StringTableListComponents.cs" />
     <Compile Include="TableCableMagazine.cs" />
+    <Compile Include="TableGeneralSpecification.cs" />
     <Compile Include="TableListComponents.cs" />
     <Compile Include="Tables.cs" />
     <Compile Include="TableTubeConnections.cs" />

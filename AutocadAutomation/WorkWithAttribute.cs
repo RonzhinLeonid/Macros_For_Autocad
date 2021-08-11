@@ -43,5 +43,10 @@ namespace AutocadAutomation
             }
             return dictionartAttribute;
         }
+
+        static public List<string> GetListParams(AttributeCollection attrC)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -40,5 +40,19 @@ namespace AutocadAutomation.TypeBlocks
             component.Add("IN_SPECIFICATION", 0);
             return component;
         }
+        static public Dictionary<string, int> GetDictionaryGeneralSpecification()
+        {
+            var component = new Dictionary<string, int>();
+            component.Add("TAG", 0);
+            component.Add("POS_ITEM", 0);
+            component.Add("DESCRIPTION", 0);
+            component.Add("PARAMETR1", 0);
+            component.Add("CAT_NUMBER", 0);
+            component.Add("MANUFACTURER", 0);
+            component.Add("MASS", 0);
+            component.Add("NOTE", 0);
+            component.Add("IN_SPECIFICATION", 0);
+            return component;
+        }
     }
 }

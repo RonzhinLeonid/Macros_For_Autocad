@@ -28,6 +28,9 @@ namespace AutocadAutomation
         private const string tableTubeConnectionsStyleName = "Трубные соединения";
         private const int startRowTableTubeConnections = 1;
 
+        private const string tableGeneralSpecificationStyleName = "Общая спецификация";
+        private const int startRowTableGeneralSpecification = 1;
+
         public static void CrateTableComponents(Document adoc, Database db, List<StringTableListComponents> listComponents, Point3d point)
         {
             using (adoc.LockDocument())

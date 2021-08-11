@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutocadAutomation.View"
              mc:Ignorable="d" 
-             Height="300" Width="800" x:Name="TableTubeConnections">
+             Height="300" Width="1000" x:Name="TableTubeConnections">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -15,7 +15,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Поз. обозначение" Binding="{Binding Path=Tag}" Width="120" />
                 <DataGridTextColumn Header="Описание" Binding="{Binding Path=Description}" Width="200*" />
-                <DataGridTextColumn Header="Соединение" Binding="{Binding Path=Conection}" Width="200*" />
+                <DataGridTextColumn Header="Соединение" Binding="{Binding Path=Conection}" Width="350*" />
                 <DataGridTextColumn Header="Материал" Binding="{Binding Path=Material}" Width="200*" />
                 <DataGridCheckBoxColumn Header="Исключить" Binding="{Binding Path=InSpecification}" Width="100" />
             </DataGrid.Columns>
