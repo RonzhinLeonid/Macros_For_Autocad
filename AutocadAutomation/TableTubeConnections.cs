@@ -1,8 +1,6 @@
 ﻿using AutocadAutomation.BlocksClass;
 using AutocadAutomation.Data;
-using AutocadAutomation.StringTable;
 using AutocadAutomation.TypeBlocks;
-using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using System;
 using System.Collections.Generic;
@@ -13,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace AutocadAutomation
 {
-    class TableCableMagazine
+    class TableTubeConnections
     {
-        private List<BlockForCableMagazine> _listBlockForCableMagazine;
-        public List<BlockForCableMagazine> ListBlockForCableMagazine => _listBlockForCableMagazine;
-        public TableCableMagazine(Database db)
+        private List<BlockForTubeСonnections> _listBlockForTubeСonnections;
+        public List<BlockForTubeСonnections> ListBlockForTubeСonnections => _listBlockForTubeСonnections;
+        public TableTubeConnections(Database db)
         {
-            GetListBlockForCableMagazine(db);
+            GetListBlockForTubeConnections(db);
         }
 
-        private void GetListBlockForCableMagazine(Database db)
+        private void GetListBlockForTubeConnections(Database db)
         {
-            _listBlockForCableMagazine = new List<BlockForCableMagazine>();
+            _listBlockForTubeСonnections = new List<BlockForTubeСonnections>();
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
                 BlockTableRecord btr = (BlockTableRecord)tr.GetObject(SymbolUtilityServices.GetBlockModelSpaceId(db), OpenMode.ForRead);
@@ -36,17 +34,15 @@ namespace AutocadAutomation
                         AttributeCollection attrC = selectedBlock.AttributeCollection;
                         if (attrC.Count > 0)
                         {
-                            var dictionaryElement = WorkWithAttribute.IsMeet(WorkWithAttribute.FillDictionaryAttributes(attrC, Types.GetDictionaryCableMagazine()));
+                            var dictionaryElement = WorkWithAttribute.IsMeet(WorkWithAttribute.FillDictionaryAttributes(attrC, Types.GetDictionaryTubeСonnections()));
                             if (dictionaryElement)
                             {
                                 var dictAttr = WorkWithAttribute.GetDictionaryAttributes(attrC);
-                                _listBlockForCableMagazine.Add(new BlockForCableMagazine(id,
+                                _listBlockForTubeСonnections.Add(new BlockForTubeСonnections(id,
                                                                                         dictAttr["TAG"],
-                                                                                        dictAttr["START"],
-                                                                                        dictAttr["FINISH"],
-                                                                                        dictAttr["MARK_CABLE"],
-                                                                                        dictAttr["CORES_CABLE"],
-                                                                                        dictAttr["LENGTH"],
+                                                                                        dictAttr["DESCRIPTION"],
+                                                                                        dictAttr["CONECTION"],
+                                                                                        dictAttr["MATERIAL"],
                                                                                         dictAttr["IN_SPECIFICATION"],
                                                                                         selectedBlock.Position));
                             }
@@ -54,11 +50,11 @@ namespace AutocadAutomation
                     }
                 }
             }
-            _listBlockForCableMagazine = _listBlockForCableMagazine.OrderBy(u => SortCable.PadNumbers(u.Tag))
+            _listBlockForTubeСonnections = _listBlockForTubeСonnections.OrderBy(u => SortCable.PadNumbers(u.Tag))
                                                                             .ToList();
         }
 
-        public void SyncBlocksAllAttr(Database db, ObservableCollection<BlockForCableMagazine> collection)
+        public void SyncBlocksAllAttr(Database db, ObservableCollection<BlockForTubeСonnections> collection)
         {
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
@@ -75,25 +71,17 @@ namespace AutocadAutomation
                                 if (att.TextString != collection[i].Tag)
                                     att.TextString = collection[i].Tag;
                                 break;
-                            case "START":
-                                if (att.TextString != collection[i].Start)
-                                    att.TextString = collection[i].Start;
+                            case "DESCRIPTION":
+                                if (att.TextString != collection[i].Description)
+                                    att.TextString = collection[i].Description;
                                 break;
-                            case "FINISH":
-                                if (att.TextString != collection[i].Finish)
-                                    att.TextString = collection[i].Finish;
+                            case "CONECTION":
+                                if (att.TextString != collection[i].Conection)
+                                    att.TextString = collection[i].Conection;
                                 break;
-                            case "MARK_CABLE":
-                                if (att.TextString != collection[i].MarkCable)
-                                    att.TextString = collection[i].MarkCable;
-                                break;
-                            case "CORES_CABLE":
-                                if (att.TextString != collection[i].CoresCable)
-                                    att.TextString = collection[i].CoresCable;
-                                break;
-                            case "LENGTH":
-                                if (att.TextString != collection[i].Length.ToString())
-                                    att.TextString = collection[i].Length.ToString();
+                            case "MATERIAL":
+                                if (att.TextString != collection[i].Material)
+                                    att.TextString = collection[i].Material;
                                 break;
                             case "IN_SPECIFICATION":
                                 if (att.TextString != collection[i].InSpecification.ToString())

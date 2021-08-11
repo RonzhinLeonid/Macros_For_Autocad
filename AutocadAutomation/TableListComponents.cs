@@ -150,22 +150,18 @@ namespace AutocadAutomation
                                 if (att.TextString != collection[i].Tag)
                                     att.TextString = collection[i].Tag;
                                 break;
-
                             case "DESCRIPTION":
                                 if (att.TextString != collection[i].Description)
                                     att.TextString = collection[i].Description;
                                 break;
-
                             case "NOTE":
                                 if (att.TextString != collection[i].Note)
                                     att.TextString = collection[i].Note;
                                 break;
-
                             case "IN_SPECIFICATION":
                                 if (att.TextString != collection[i].InSpecification.ToString())
                                     att.TextString = collection[i].InSpecification ? "Да" : "Нет";
                                 break;
-
                             default:
                                 break;
                         }
