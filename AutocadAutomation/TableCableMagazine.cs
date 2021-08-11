@@ -1,4 +1,6 @@
 ﻿using AutocadAutomation.BlocksClass;
+using AutocadAutomation.Data;
+using AutocadAutomation.StringTable;
 using AutocadAutomation.TypeBlocks;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
@@ -7,9 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace AutocadAutomation
 {
@@ -47,28 +47,24 @@ namespace AutocadAutomation
                                                                                         dictAttr["MARK_CABLE"],
                                                                                         dictAttr["CORES_CABLE"],
                                                                                         dictAttr["LENGTH"],
-                                                                                        dictAttr["IN_SPECIFICATION"]));
+                                                                                        dictAttr["IN_SPECIFICATION"],
+                                                                                        selectedBlock.Position));
                             }
                         }
                     }
                 }
             }
-            _listBlockForCableMagazine = _listBlockForCableMagazine.OrderBy(u => PadNumbers(u.Tag))
+            _listBlockForCableMagazine = _listBlockForCableMagazine.OrderBy(u => SortCable.PadNumbers(u.Tag))
                                                                             .ToList();
-            // list.OrderBy(x => int.TryParse(x, out var dummy) ? dummy.ToString("D10") : x);
-            //var result = partNumbers.OrderBy(x => PadNumbers(x));
         }
-        static string PadNumbers(string input)
-        {
-            return Regex.Replace(input, "[0-9]+", match => match.Value.PadLeft(10, '0'));
-        }
+
         public void SyncBlocksAllAttr(Database db, ObservableCollection<BlockForCableMagazine> collection)
         {
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
-                for (int i = 0; i < _listBlockForCableMagazine.Count; i++)
+                for (int i = 0; i < collection.Count; i++)
                 {
-                    BlockReference selectedBlock = tr.GetObject(_listBlockForCableMagazine[i].IdBlock, OpenMode.ForWrite) as BlockReference; // получить BlockReference
+                    BlockReference selectedBlock = tr.GetObject(collection[i].IdBlock, OpenMode.ForWrite) as BlockReference; // получить BlockReference
                     AttributeCollection attrIdCollection = selectedBlock.AttributeCollection;
                     foreach (ObjectId idAttRef in attrIdCollection)
                     {

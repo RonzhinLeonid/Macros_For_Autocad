@@ -1,4 +1,5 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace AutocadAutomation.BlocksClass
         private string _markCable;
         private string _coresCable;
         private int _length;
+        private Point3d _position;
 
         public string Start
         {
@@ -77,6 +79,18 @@ namespace AutocadAutomation.BlocksClass
             }
         }
 
+        public Point3d Position
+        {
+            get
+            {
+                return _position;
+            }
+
+            set
+            {
+                _position = value;
+            }
+        }
         public BlockForCableMagazine(ObjectId idBlock,
                                        string tag,
                                        string start,
@@ -84,19 +98,20 @@ namespace AutocadAutomation.BlocksClass
                                        string markCable,
                                        string coresCable,
                                        string length,
-                                       string inSpecification) : base(idBlock, tag, inSpecification)
+                                       string inSpecification,
+                                       Point3d position) : base(idBlock, tag, inSpecification)
         {
             _start = start;
             _finish = finish;
             _markCable = markCable;
             _coresCable = coresCable;
-            //_length = length;
             var rez = int.TryParse(length, out _length);
             if (!rez)
             {
                 _length = 0;
-                MessageBox.Show($"Длинна кабеля {tag} не является числом!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show($"Длинна кабеля {tag} не является числом!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            _position = position;
         }
     }
 }

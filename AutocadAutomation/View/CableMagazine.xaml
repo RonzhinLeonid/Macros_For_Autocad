@@ -4,14 +4,34 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutocadAutomation.View"
+             xmlns:localData="clr-namespace:AutocadAutomation.Data"
              mc:Ignorable="d" 
              Height="300" Width="800" x:Name="TableCableMagazine">
-    <Grid>
+    <Window.Resources>
+        <localData:OptionConverter x:Key="genderConverterKey" />
+    </Window.Resources>
+        <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
             <RowDefinition />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding Collect}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False">
+        <StackPanel Orientation="Horizontal" Grid.Row="0"  HorizontalAlignment="Center">
+            <RadioButton Content="🡪, 🡫" GroupName="RenameCable" Margin="10,0,10,0" IsChecked="{Binding Option, Converter={StaticResource ResourceKey=genderConverterKey}, ConverterParameter=LeftRightUpDown}" />
+            <RadioButton Content="🡪, 🡩" GroupName="RenameCable" Margin="10,0,10,0" IsChecked="{Binding Option, Converter={StaticResource ResourceKey=genderConverterKey}, ConverterParameter=LeftRightDownUp}" />
+            <RadioButton Content="🡨, 🡫" GroupName="RenameCable" Margin="10,0,10,0" IsChecked="{Binding Option, Converter={StaticResource ResourceKey=genderConverterKey}, ConverterParameter=RightLeftUpDown}" />
+            <RadioButton Content="🡨, 🡩" GroupName="RenameCable" Margin="10,0,10,0" IsChecked="{Binding Option, Converter={StaticResource ResourceKey=genderConverterKey}, ConverterParameter=RightLeftDownUp}" />
+            <RadioButton Content="🡫, 🡪" GroupName="RenameCable" Margin="10,0,10,0" IsChecked="{Binding Option, Converter={StaticResource ResourceKey=genderConverterKey}, ConverterParameter=UpDownLeftRight}" />
+            <RadioButton Content="🡫, 🡨" GroupName="RenameCable" Margin="10,0,10,0" IsChecked="{Binding Option, Converter={StaticResource ResourceKey=genderConverterKey}, ConverterParameter=UpDownRightLeft}" />
+            <RadioButton Content="🡩, 🡪" GroupName="RenameCable" Margin="10,0,10,0" IsChecked="{Binding Option, Converter={StaticResource ResourceKey=genderConverterKey}, ConverterParameter=DownUpLeftRight}" />
+            <RadioButton Content="🡩, 🡨" GroupName="RenameCable" Margin="10,0,10,0" IsChecked="{Binding Option, Converter={StaticResource ResourceKey=genderConverterKey}, ConverterParameter=DownUpRightLeft}" />
+            <RadioButton Content="Без привязки к координатам" GroupName="RenameCable" IsChecked="{Binding Option, Mode=TwoWay, Converter={StaticResource ResourceKey=genderConverterKey}, ConverterParameter=NonSortCoordinates}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+            <Button Name="btnSort" Content="Пронумеровать кабели" Margin="2" Command="{Binding RenameCableCommand}" />
+        </StackPanel>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Collect, Mode=TwoWay}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Поз. обозначение" Binding="{Binding Path=Tag}" Width="120" />
                 <DataGridTextColumn Header="Начало" Binding="{Binding Path=Start}" Width="*" />
@@ -31,7 +51,7 @@
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Height="25" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Height="25" HorizontalAlignment="Center">
             <Button Content="Ок" Margin="2" Width="{Binding ElementName=btnCancel, Path=ActualWidth}" Command="{Binding OKCommand}" CommandParameter ="{Binding ElementName=TableCableMagazine}" />
             <Button Name="btnCancel" Content="Отмена" Margin="2" Command="{Binding CanselCommand}" CommandParameter ="{Binding ElementName=TableCableMagazine}" />
         </StackPanel>
