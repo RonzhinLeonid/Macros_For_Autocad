@@ -30,5 +30,15 @@ namespace AutocadAutomation.TypeBlocks
             component.Add("IN_SPECIFICATION", 0);
             return component;
         }
+        static public Dictionary<string, int> GetDictionaryTubeСonnections()
+        {
+            var component = new Dictionary<string, int>();
+            component.Add("TAG", 0);
+            component.Add("DESCRIPTION", 0);
+            component.Add("CONECTION", 0);
+            component.Add("MATERIAL", 0);
+            component.Add("IN_SPECIFICATION", 0);
+            return component;
+        }
     }
 }

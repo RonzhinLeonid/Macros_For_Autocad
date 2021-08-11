@@ -120,7 +120,56 @@ namespace AutocadAutomation
             CableMagazine window = new CableMagazine(data);
             if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
                 tableCableMagazine.SyncBlocksAllAttr(db, data.Collect);
-        } 
+        }
+        #endregion
+
+        #region Трубные соединения
+        [CommandMethod("CreateTableTubeСonnections")]
+        public void CreateTableTubeСonnections_Method()
+        {
+            db = adoc.Database;
+            ed = adoc.Editor;
+
+            var tableTubeСonnections = new TableTubeConnections(db);
+
+            var listCables = tableTubeСonnections.ListBlockForTubeСonnections;
+            if (!listCables.Any())
+            {
+                MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Point3d point;
+            var po = new PromptPointOptions("\nУкажите точку вставки таблицы.") { AllowNone = false };
+            var r = ed.GetPoint(po);
+            if (r.Status == PromptStatus.OK)
+                point = r.Value;
+            else if (r.Status == PromptStatus.Cancel)
+            {
+                return;
+            }
+            else
+                return;
+            Tables.CrateTableTubeСonnections(adoc, db, listCables, point);
+        }
+
+        [CommandMethod("EditListTubeСonnections")]
+        public void EditListTubeСonnections_Method()
+        {
+            db = adoc.Database;
+            ed = adoc.Editor;
+
+            var tableTubeСonnections = new TableTubeConnections(db);
+            if (!tableTubeСonnections.ListBlockForTubeСonnections.Any())
+            {
+                MessageBox.Show($"Кабелей для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            DataTableTubeConnections data = new DataTableTubeConnections() { Collect = new ObservableCollection<BlockForTubeСonnections>(tableTubeСonnections.ListBlockForTubeСonnections) };
+            TubeConnections window = new TubeConnections(data);
+            if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
+                tableTubeСonnections.SyncBlocksAllAttr(db, data.Collect);
+        }
         #endregion
     }
 }
