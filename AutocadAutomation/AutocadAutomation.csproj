@@ -59,7 +59,8 @@
     <Compile Include="BlocksClass\BlockBase.cs" />
     <Compile Include="BlocksClass\BlockForCableMagazine.cs" />
     <Compile Include="BlocksClass\BlockForListComponents.cs" />
-    <Compile Include="Data\GenderConverter.cs" />
+    <Compile Include="Data\ComparerCoordinatesWithDelta.cs" />
+    <Compile Include="Data\OptionConverter.cs" />
     <Compile Include="Data\DataTableCableMagazine.cs" />
     <Compile Include="Data\DataTableComponent.cs" />
     <Compile Include="Data\DelegateCommand.cs" />

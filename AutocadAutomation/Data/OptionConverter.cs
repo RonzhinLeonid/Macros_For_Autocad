@@ -8,7 +8,7 @@ using static AutocadAutomation.Data.RenameOptions;
 
 namespace AutocadAutomation.Data
 {
-    public class GenderConverter : IValueConverter
+    public class OptionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
