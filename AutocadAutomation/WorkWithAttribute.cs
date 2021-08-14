@@ -44,9 +44,23 @@ namespace AutocadAutomation
             return dictionartAttribute;
         }
 
-        static public List<string> GetListParams(AttributeCollection attrC)
-        {
-            throw new NotImplementedException();
-        }
+        //static public List<string> GetListParams(AttributeCollection attrC)
+        //{
+        //    List<string> rez = new List<string>;
+        //    foreach (ObjectId idAtrRef in attrC)
+        //    {
+        //        using (var atrRef = idAtrRef.GetObject(OpenMode.ForRead) as AttributeReference)
+        //        {
+        //            if (atrRef != null)
+        //            {
+        //                if (dictionaryBlock.ContainsKey(atrRef.Tag))
+        //                    dictionaryBlock[atrRef.Tag] = 1;
+
+        //                dictionartAttribute.Add(atrRef.Tag, atrRef.TextString);
+        //            }
+        //        }
+        //    }
+        //    throw new NotImplementedException();
+        //}
     }
 }

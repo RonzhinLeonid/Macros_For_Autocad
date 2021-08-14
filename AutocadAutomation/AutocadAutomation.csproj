@@ -60,8 +60,9 @@
     <Compile Include="BlocksClass\BlockForCableMagazine.cs" />
     <Compile Include="BlocksClass\BlockForListComponents.cs" />
     <Compile Include="BlocksClass\BlockForTubeСonnections.cs" />
-    <Compile Include="BlocksClass\BlockGeneralSpecification.cs" />
+    <Compile Include="BlocksClass\BlockForGeneralSpecification.cs" />
     <Compile Include="Data\ComparerCoordinatesWithDelta.cs" />
+    <Compile Include="Data\DataTableGeneralSpecification.cs" />
     <Compile Include="Data\DataTableTubeConnections.cs" />
     <Compile Include="Data\OptionConverter.cs" />
     <Compile Include="Data\DataTableCableMagazine.cs" />
@@ -84,6 +85,9 @@
     <Compile Include="View\CableMagazine.xaml.cs">
       <DependentUpon>CableMagazine.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\GeneralSpecification.xaml.cs">
+      <DependentUpon>GeneralSpecification.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ListComponents.xaml.cs">
       <DependentUpon>ListComponents.xaml</DependentUpon>
     </Compile>
@@ -94,6 +98,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="View\CableMagazine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GeneralSpecification.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

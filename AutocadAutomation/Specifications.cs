@@ -208,16 +208,16 @@ namespace AutocadAutomation
             db = adoc.Database;
             ed = adoc.Editor;
 
-            var tableTubeСonnections = new TableTubeConnections(db);
-            if (!tableTubeСonnections.ListBlockForTubeСonnections.Any())
+            var tableGeneralSpecification = new TableGeneralSpecification(db);
+            if (!tableGeneralSpecification.ListBlockForGeneralSpecification.Any())
             {
-                MessageBox.Show($"Кабелей для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Блоков для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            DataTableTubeConnections data = new DataTableTubeConnections() { Collect = new ObservableCollection<BlockForTubeСonnections>(tableTubeСonnections.ListBlockForTubeСonnections) };
-            TubeConnections window = new TubeConnections(data);
+            DataTableGeneralSpecification data = new DataTableGeneralSpecification() { Collect = new ObservableCollection<BlockForGeneralSpecification>(tableGeneralSpecification.ListBlockForGeneralSpecification) };
+            GeneralSpecification window = new GeneralSpecification(data);
             if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
-                tableTubeСonnections.SyncBlocksAllAttr(db, data.Collect);
+                tableGeneralSpecification.SyncBlocksAllAttr(db, data.Collect);
         }
         #endregion
     }

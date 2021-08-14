@@ -13,9 +13,9 @@ namespace AutocadAutomation
 {
     class TableGeneralSpecification
     {
-        private List<BlockGeneralSpecification> _listBlockForGeneralSpecification;
+        private List<BlockForGeneralSpecification> _listBlockForGeneralSpecification;
         private List<StringTableGeneralSpecification> _listStringTableGeneralSpecification;
-        public List<BlockGeneralSpecification> ListBlockForGeneralSpecification => _listBlockForGeneralSpecification;
+        public List<BlockForGeneralSpecification> ListBlockForGeneralSpecification => _listBlockForGeneralSpecification;
         public List<StringTableGeneralSpecification> ListStringTableGeneralSpecification => _listStringTableGeneralSpecification;
 
         public TableGeneralSpecification(Database db)
@@ -25,7 +25,7 @@ namespace AutocadAutomation
 
         private void GetListBlockForGeneralSpecification(Database db)
         {
-            _listBlockForGeneralSpecification = new List<BlockGeneralSpecification>();
+            _listBlockForGeneralSpecification = new List<BlockForGeneralSpecification>();
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
                 BlockTableRecord btr = (BlockTableRecord)tr.GetObject(SymbolUtilityServices.GetBlockModelSpaceId(db), OpenMode.ForRead);
@@ -41,11 +41,14 @@ namespace AutocadAutomation
                             if (dictionaryElement)
                             {
                                 var dictAttr = WorkWithAttribute.GetDictionaryAttributes(attrC);
-                                var listParams = WorkWithAttribute.GetListParams(attrC);
-                                _listBlockForGeneralSpecification.Add(new BlockGeneralSpecification(id,
+                                _listBlockForGeneralSpecification.Add(new BlockForGeneralSpecification(id,
                                                                                         dictAttr["TAG"],
                                                                                         dictAttr["DESCRIPTION"],
-                                                                                        listParams,
+                                                                                        dictAttr["PARAMETR1"],
+                                                                                        dictAttr["PARAMETR2"],
+                                                                                        dictAttr["PARAMETR3"],
+                                                                                        dictAttr["PARAMETR4"],
+                                                                                        dictAttr["PARAMETR5"],
                                                                                         dictAttr["CAT_NUMBER"],
                                                                                         dictAttr["MANUFACTURER"],
                                                                                         dictAttr["NOTE"],
@@ -136,7 +139,7 @@ namespace AutocadAutomation
             }
         }
 
-        public void SyncBlocksAllAttr(Database db, ObservableCollection<BlockGeneralSpecification> collection)
+        public void SyncBlocksAllAttr(Database db, ObservableCollection<BlockForGeneralSpecification> collection)
         {
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
@@ -149,24 +152,52 @@ namespace AutocadAutomation
                         AttributeReference att = tr.GetObject(idAttRef, OpenMode.ForWrite) as AttributeReference;
                         switch (att.Tag.ToUpper())
                         {
-                            //case "TAG":
-                            //    if (att.TextString != collection[i].Tag)
-                            //        att.TextString = collection[i].Tag;
-                            //    break;
-                            //case "DESCRIPTION":
-                            //    if (att.TextString != collection[i].Description)
-                            //        att.TextString = collection[i].Description;
-                            //    break;
-                            //case "NOTE":
-                            //    if (att.TextString != collection[i].Note)
-                            //        att.TextString = collection[i].Note;
-                            //    break;
-                            //case "IN_SPECIFICATION":
-                            //    if (att.TextString != collection[i].InSpecification.ToString())
-                            //        att.TextString = collection[i].InSpecification ? "Да" : "Нет";
-                            //    break;
-                            //default:
-                            //    break;
+                            case "TAG":
+                                if (att.TextString != collection[i].Tag)
+                                    att.TextString = collection[i].Tag;
+                                break;
+                            case "DESCRIPTION":
+                                if (att.TextString != collection[i].Description)
+                                    att.TextString = collection[i].Description;
+                                break;
+                            case "PARAMETR1":
+                                if (att.TextString != collection[i].Parametr1)
+                                    att.TextString = collection[i].Parametr1;
+                                break;
+                            case "PARAMETR2":
+                                if (att.TextString != collection[i].Parametr2)
+                                    att.TextString = collection[i].Parametr2;
+                                break;
+                            case "PARAMETR3":
+                                if (att.TextString != collection[i].Parametr3)
+                                    att.TextString = collection[i].Parametr3;
+                                break;
+                            case "PARAMETR4":
+                                if (att.TextString != collection[i].Parametr4)
+                                    att.TextString = collection[i].Parametr4;
+                                break;
+                            case "PARAMETR5":
+                                if (att.TextString != collection[i].Parametr5)
+                                    att.TextString = collection[i].Parametr5;
+                                break;
+                            case "CAT_NUMBER":
+                                if (att.TextString != collection[i].CatNumber)
+                                    att.TextString = collection[i].CatNumber;
+                                break;
+                            case "MANUFACTURER":
+                                if (att.TextString != collection[i].Manufac)
+                                    att.TextString = collection[i].Manufac;
+                                break;
+                            case "NOTE":
+                                if (att.TextString != collection[i].Note)
+                                    att.TextString = collection[i].Note;
+                                break;
+                            case "IN_SPECIFICATION":
+                                if (att.TextString != collection[i].InSpecification.ToString())
+                                    att.TextString = collection[i].InSpecification ? "Да" : "Нет";
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }

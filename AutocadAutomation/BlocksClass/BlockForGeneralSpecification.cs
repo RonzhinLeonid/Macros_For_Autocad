@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 
 namespace AutocadAutomation.BlocksClass
 {
-    public class BlockGeneralSpecification : BlockBase
+    public class BlockForGeneralSpecification : BlockBase
     {
         private string _posItem;
         private string _description;
-        private List<string> _parametrs;
+        private string _parametr1;
+        private string _parametr2;
+        private string _parametr3;
+        private string _parametr4;
+        private string _parametr5;
         private string _catNumber;
         private string _manufac;
         private string _note;
@@ -40,15 +44,64 @@ namespace AutocadAutomation.BlocksClass
                 _description = value;
             }
         }
-        public List<string> Parametrs
+
+        public string Parametr1
         {
             get
             {
-                return _parametrs;
+                return _parametr1;
             }
             set
             {
-                _parametrs = value;
+                _parametr1 = value;
+            }
+        }
+
+        public string Parametr2
+        {
+            get
+            {
+                return _parametr2;
+            }
+            set
+            {
+                _parametr2 = value;
+            }
+        }
+
+        public string Parametr3
+        {
+            get
+            {
+                return _parametr3;
+            }
+            set
+            {
+                _parametr3 = value;
+            }
+        }
+
+        public string Parametr4
+        {
+            get
+            {
+                return _parametr4;
+            }
+            set
+            {
+                _parametr4 = value;
+            }
+        }
+
+        public string Parametr5
+        {
+            get
+            {
+                return _parametr5;
+            }
+            set
+            {
+                _parametr5 = value;
             }
         }
 
@@ -100,17 +153,25 @@ namespace AutocadAutomation.BlocksClass
             }
         }
 
-        public BlockGeneralSpecification(ObjectId idBlock,
+        public BlockForGeneralSpecification(ObjectId idBlock,
                                         string tag,
                                         string description,
-                                        List<string> parametrs,
+                                        string parametr1,
+                                        string parametr2,
+                                        string parametr3,
+                                        string parametr4,
+                                        string parametr5,
                                         string catNumber,
                                         string manufac,
                                         string note,
                                         string inSpecification) : base(idBlock, tag, inSpecification)
         {
             _description = description;
-            _parametrs = parametrs;
+            _parametr1 = parametr1;
+            _parametr2 = parametr2;
+            _parametr3 = parametr3;
+            _parametr4 = parametr4;
+            _parametr5 = parametr5;
             _catNumber = catNumber;
             _manufac = manufac;
             _note = note;
