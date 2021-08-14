@@ -33,8 +33,8 @@ namespace AutocadAutomation
 
             var tableListComponents = new TableListComponents(db);
             tableListComponents.GetTableListComponents();
-            var listComponents = tableListComponents.ListStringTableListComponents;
-            if (!listComponents.Any())
+            var listStringTable = tableListComponents.ListStringTableListComponents;
+            if (!listStringTable.Any())
             {
                 MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -52,7 +52,7 @@ namespace AutocadAutomation
             }
             else
                 return;
-            Tables.CrateTableComponents(adoc, db, listComponents, point);
+            Tables.CrateTableComponents(adoc, db, listStringTable, point);
         }
 
         [CommandMethod("EditListComponents")]
@@ -176,30 +176,33 @@ namespace AutocadAutomation
         [CommandMethod("CreateTableGeneralSpecification")]
         public void CreateTableGeneralSpecification_Method()
         {
-            //db = adoc.Database;
-            //ed = adoc.Editor;
+            db = adoc.Database;
+            ed = adoc.Editor;
 
-            //var tableTubeСonnections = new TableTubeConnections(db);
+            var tableGeneralSpecification = new TableGeneralSpecification(db);
+            tableGeneralSpecification.GetTableGeneralSpecification();
 
-            //var listCables = tableTubeСonnections.ListBlockForTubeСonnections;
-            //if (!listCables.Any())
-            //{
-            //    MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //    return;
-            //}
+            var listStringTable = tableGeneralSpecification.ListStringTableGeneralSpecification;
 
-            //Point3d point;
-            //var po = new PromptPointOptions("\nУкажите точку вставки таблицы.") { AllowNone = false };
-            //var r = ed.GetPoint(po);
-            //if (r.Status == PromptStatus.OK)
-            //    point = r.Value;
-            //else if (r.Status == PromptStatus.Cancel)
-            //{
-            //    return;
-            //}
-            //else
-            //    return;
-            //Tables.CrateTableTubeСonnections(adoc, db, listCables, point);
+            if (!listStringTable.Any())
+            {
+                MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            tableGeneralSpecification.SyncBlocksPosItemAttr(db);
+
+            Point3d point;
+            var po = new PromptPointOptions("\nУкажите точку вставки таблицы.") { AllowNone = false };
+            var r = ed.GetPoint(po);
+            if (r.Status == PromptStatus.OK)
+                point = r.Value;
+            else if (r.Status == PromptStatus.Cancel)
+            {
+                return;
+            }
+            else
+                return;
+            Tables.CrateTableGeneralSpecification(adoc, db, listStringTable, point);
         }
 
         [CommandMethod("EditListGeneralSpecification")]

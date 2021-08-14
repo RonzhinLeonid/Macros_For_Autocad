@@ -29,7 +29,7 @@ namespace AutocadAutomation
         private const int startRowTableTubeConnections = 1;
 
         private const string tableGeneralSpecificationStyleName = "Общая спецификация";
-        private const int startRowTableGeneralSpecification = 1;
+        private const int startRowTableGeneralSpecification = 2;
 
         public static void CrateTableComponents(Document adoc, Database db, List<StringTableListComponents> listComponents, Point3d point)
         {
@@ -235,6 +235,69 @@ namespace AutocadAutomation
                             }
                             else
                                 tableInstance.DeleteRows(tableInstance.Rows.Count - 1, 1);
+                        }
+                        tr.Commit();
+                    }
+                }
+            }
+        }
+
+        public static void CrateTableGeneralSpecification(Document adoc, Database db, List<StringTableGeneralSpecification> listComponents, Point3d point)
+        {
+            using (adoc.LockDocument())
+            {
+                using (Transaction tr = db.TransactionManager.StartTransaction())
+                {
+                    DBDictionary dict = tr.GetObject(db.TableStyleDictionaryId, OpenMode.ForRead) as DBDictionary;
+                    if (!dict.Contains(tableGeneralSpecificationStyleName))   //необходимо переделать проверку, если нужного шаблона нет, то запустить метод по созданию этого шаблона
+                    {
+                        MessageBox.Show($"Проверьте шаблон чертежа. Стиль таблицы \"{tableGeneralSpecificationStyleName}\" отсутствует!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else
+                    {
+                        TableStyle ts = tr.GetObject(dict.GetAt(tableGeneralSpecificationStyleName), OpenMode.ForRead) as TableStyle;
+                        string[] cellStyles = ts.CellStyles.Cast<string>().ToArray();
+                        string cellStyle = cellStyles.FirstOrDefault(item => item.ToLower().Contains(tableComponentStyleCell.ToLower()));
+
+                        TableTemplate template;
+                        try
+                        {
+                            template = tr.GetObject(ts.Template, OpenMode.ForRead) as TableTemplate;
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show($"Проверьте стиль таблицы. нет привязки к таблице", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        // Включим отображение толщин линий,
+                        // дабы увидеть результат нашей работы
+                        //cad.SetSystemVariable("LWDISPLAY", 1);
+                        // Создаём новую таблицу, на основе
+                        // созданного нами шаблона.
+                        Table tableInstance = new Table();
+                        tableInstance.CopyFrom(template, TableCopyOptions.FillTarget);
+                        tableInstance.GenerateLayout();
+                        tableInstance.Position = point;
+                        BlockTable bt = tr.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+                        BlockTableRecord modelSpace = tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+                        modelSpace.AppendEntity(tableInstance);
+                        tr.AddNewlyCreatedDBObject(tableInstance, true);
+                        if (tableInstance.Rows.Count > startRowTableGeneralSpecification)
+                            tableInstance.DeleteRows(startRowTableGeneralSpecification, tableInstance.Rows.Count - startRowTableGeneralSpecification);
+
+                        tableInstance.InsertRows(startRowTableGeneralSpecification, 8, listComponents.Count);
+                        int row = startRowTableGeneralSpecification;
+                        foreach (var item in listComponents)
+                        {
+                            tableInstance.Cells[row, 0].TextString = item.PosItem.ToString();
+                            tableInstance.Cells[row, 1].TextString = item.AllTag;
+                            tableInstance.Cells[row, 2].TextString = item.FullDescription;
+                            tableInstance.Cells[row, 3].TextString = item.Count.ToString();
+                            tableInstance.Cells[row, 4].TextString = item.Note;
+                            if (!string.IsNullOrEmpty(cellStyle))
+                                tableInstance.Cells[row, 2].Style = cellStyle;
+                            row++;
                         }
                         tr.Commit();
                     }

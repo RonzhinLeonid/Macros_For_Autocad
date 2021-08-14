@@ -64,55 +64,74 @@ namespace AutocadAutomation
                                                                      .ToList();
         }
 
-        public void GetTableListComponents()
+        public void GetTableGeneralSpecification()
         {
             _listStringTableGeneralSpecification = new List<StringTableGeneralSpecification>();
-            string posItem = "";
+            //string posItem = "";
+            int posItemPref = 1;
             string tempDicript = "";
             string tempNote = "";
-            foreach (var item in _listBlockForGeneralSpecification)
+
+            var ListManuf = _listBlockForGeneralSpecification.GroupBy(p => p.Manufac);
+            foreach (var manuf in ListManuf)
             {
-                if (!item.InSpecification) continue;
-                //if (tempDicript != item.Description)
-                //{
-                //    _listStringTableGeneralSpecification.Add(new StringTableGeneralSpecification()
-                //    {
-                //        IdBlock = new List<ObjectId>() { item.IdBlock },
-                //        PosItem = posItem,
-                //        AllTag = item.Tag,
-                //        FullDescription = item.Description,
-                //        Count = 1,
-                //        Note = item.Note
-                //    });
-                //    posItem++;
-                //    tempDicript = item.Description;
-                //    tempNote = item.Note;
-                //}
-                //else
-                //{
-                //    if (tempNote == item.Note)
-                //    {
-                //        _listStringTableGeneralSpecification.Last().IdBlock.Add(item.IdBlock);
-                //        _listStringTableGeneralSpecification.Last().AllTag = _listStringTableGeneralSpecification.Last().AllTag + ", " + item.Tag;
-                //        _listStringTableGeneralSpecification.Last().Count++;
-                //    }
-                //    else
-                //    {
-                //        _listStringTableGeneralSpecification.Add(new StringTableListComponents()
-                //        {
-                //            IdBlock = new List<ObjectId>() { item.IdBlock },
-                //            PosItem = posItem,
-                //            AllTag = item.Tag,
-                //            FullDescription = item.Description,
-                //            Count = 1,
-                //            Note = item.Note
-                //        });
-                //        posItem++;
-                //        tempDicript = item.Description;
-                //        tempNote = item.Note;
-                //    }
-                //}
+                int posItemPostf = 1;
+                foreach (var item in manuf)
+                {
+                    if (!item.InSpecification) continue;
+
+                    string fullDicript = GetFullDesc(item);
+
+                    if (tempDicript != item.Description)
+                    {
+                        _listStringTableGeneralSpecification.Add(new StringTableGeneralSpecification()
+                        {
+                            IdBlock = new List<ObjectId>() { item.IdBlock },
+                            PosItem = $"{posItemPref}.{posItemPostf}",
+                            AllTag = item.Tag,
+                            FullDescription = fullDicript,
+                            Manufac = item.Manufac,
+                            CatNumber = item.CatNumber,
+                            Count = 1,
+                            Note = item.Note
+                        });
+                        posItemPostf++;
+                        tempNote = item.Note;
+                    }
+                    else
+                    {
+                        if (tempNote == item.Note)
+                        {
+                            _listStringTableGeneralSpecification.Last().IdBlock.Add(item.IdBlock);
+                            _listStringTableGeneralSpecification.Last().AllTag = _listStringTableGeneralSpecification.Last().AllTag + ", " + item.Tag;
+                            _listStringTableGeneralSpecification.Last().Count++;
+                        }
+                        else
+                        {
+                            _listStringTableGeneralSpecification.Add(new StringTableGeneralSpecification()
+                            {
+                                IdBlock = new List<ObjectId>() { item.IdBlock },
+                                PosItem = $"{posItemPref}.{posItemPostf}",
+                                AllTag = item.Tag,
+                                FullDescription = item.Description,
+                                Manufac = item.Manufac,
+                                CatNumber = item.CatNumber,
+                                Count = 1,
+                                Note = item.Note
+                            });
+                            posItemPostf++;
+                            tempDicript = item.Description;
+                            tempNote = item.Note;
+                        }
+                    }
+                }
+                posItemPref++;
             }
+        }
+
+        private string GetFullDesc(BlockForGeneralSpecification item)
+        {
+            return $"{item.Description} {item.Parametr1} {item.Parametr2} {item.Parametr3} {item.Parametr4} {item.Parametr5}".Trim(' ');
         }
 
         public void SyncBlocksPosItemAttr(Database db)
