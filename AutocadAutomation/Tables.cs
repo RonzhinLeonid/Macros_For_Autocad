@@ -290,13 +290,15 @@ namespace AutocadAutomation
                         int row = startRowTableGeneralSpecification;
                         foreach (var item in listComponents)
                         {
-                            tableInstance.Cells[row, 0].TextString = item.PosItem.ToString();
-                            tableInstance.Cells[row, 1].TextString = item.AllTag;
-                            tableInstance.Cells[row, 2].TextString = item.FullDescription;
-                            tableInstance.Cells[row, 3].TextString = item.Count.ToString();
-                            tableInstance.Cells[row, 4].TextString = item.Note;
+                            tableInstance.Cells[row, 0].TextString = item.PosItem;
+                            tableInstance.Cells[row, 1].TextString = item.FullDescription;
+                            tableInstance.Cells[row, 2].TextString = item.AllTag;
+                            tableInstance.Cells[row, 3].TextString = item.CatNumber;
+                            tableInstance.Cells[row, 4].TextString = item.Manufac;
+                            tableInstance.Cells[row, 6].TextString = item.Count.ToString();
+                            tableInstance.Cells[row, 8].TextString = item.Note;
                             if (!string.IsNullOrEmpty(cellStyle))
-                                tableInstance.Cells[row, 2].Style = cellStyle;
+                                tableInstance.Cells[row, 1].Style = cellStyle;
                             row++;
                         }
                         tr.Commit();

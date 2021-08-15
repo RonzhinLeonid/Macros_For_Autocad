@@ -82,7 +82,7 @@ namespace AutocadAutomation
 
                     string fullDicript = GetFullDesc(item);
 
-                    if (tempDicript != item.Description)
+                    if (tempDicript != fullDicript)
                     {
                         _listStringTableGeneralSpecification.Add(new StringTableGeneralSpecification()
                         {
@@ -120,7 +120,7 @@ namespace AutocadAutomation
                                 Note = item.Note
                             });
                             posItemPostf++;
-                            tempDicript = item.Description;
+                            tempDicript = fullDicript;
                             tempNote = item.Note;
                         }
                     }
