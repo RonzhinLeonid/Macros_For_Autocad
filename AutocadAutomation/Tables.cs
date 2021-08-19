@@ -288,8 +288,14 @@ namespace AutocadAutomation
 
                         tableInstance.InsertRows(startRowTableGeneralSpecification, 8, listComponents.Count);
                         int row = startRowTableGeneralSpecification;
+                        string tempManufac = null;
                         foreach (var item in listComponents)
                         {
+                            if (tempManufac != item.Manufac && tempManufac != null)
+                            {
+                                tableInstance.InsertRows(row, 8, 1);
+                                row++;
+                            }
                             tableInstance.Cells[row, 0].TextString = item.PosItem;
                             tableInstance.Cells[row, 1].TextString = item.FullDescription;
                             tableInstance.Cells[row, 2].TextString = item.AllTag;
@@ -300,6 +306,7 @@ namespace AutocadAutomation
                             if (!string.IsNullOrEmpty(cellStyle))
                                 tableInstance.Cells[row, 1].Style = cellStyle;
                             row++;
+                            tempManufac = item.Manufac;
                         }
                         tr.Commit();
                     }
