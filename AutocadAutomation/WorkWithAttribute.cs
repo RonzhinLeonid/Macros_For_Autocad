@@ -10,7 +10,7 @@ namespace AutocadAutomation
     static class WorkWithAttribute
     {
         static public Dictionary<string, int> FillDictionaryAttributes(AttributeCollection attrC, Dictionary<string, int> dictionaryBlock)
-        {
+        { 
             foreach (ObjectId idAtrRef in attrC)
             {
                 using (var atrRef = idAtrRef.GetObject(OpenMode.ForRead) as AttributeReference)
@@ -19,6 +19,8 @@ namespace AutocadAutomation
                     {
                         if (dictionaryBlock.ContainsKey(atrRef.Tag))
                             dictionaryBlock[atrRef.Tag] = 1;
+                        else
+                            dictionaryBlock.Add(atrRef.Tag, 0);
                     }
                 }
             }

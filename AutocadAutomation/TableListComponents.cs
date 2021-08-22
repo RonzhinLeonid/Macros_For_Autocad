@@ -1,4 +1,5 @@
 ﻿using AutocadAutomation.BlocksClass;
+using AutocadAutomation.Data;
 using AutocadAutomation.StringTable;
 using AutocadAutomation.TypeBlocks;
 using Autodesk.AutoCAD.ApplicationServices;
@@ -54,59 +55,24 @@ namespace AutocadAutomation
             }
             _listBlockForListComponents = _listBlockForListComponents.OrderBy(u => u.Description)
                                                                      .ThenBy(u => u.Note)
-                                                                     .ThenBy(u => u.Tag)
+                                                                     .ThenBy(u => SortCable.PadNumbers(u.Tag))
                                                                      .ToList();
         }
 
         public void GetTableListComponents()
         {
-            _listStringTableListComponents = new List<StringTableListComponents>();
             int posItem = 1;
-            string tempDicript = "";
-            string tempNote = "";
-            foreach (var item in _listBlockForListComponents)
-            {
-                if (!item.InSpecification) continue;
-                if (tempDicript != item.Description)
-                {
-                    _listStringTableListComponents.Add(new StringTableListComponents()
-                    {
-                        IdBlock = new List<ObjectId>() { item.IdBlock },
-                        PosItem = posItem,
-                        AllTag = item.Tag,
-                        FullDescription = item.Description,
-                        Count = 1,
-                        Note = item.Note
-                    });
-                    posItem++;
-                    tempDicript = item.Description;
-                    tempNote = item.Note;
-                }
-                else
-                {
-                    if (tempNote == item.Note)
-                    {
-                        _listStringTableListComponents.Last().IdBlock.Add(item.IdBlock);
-                        _listStringTableListComponents.Last().AllTag = _listStringTableListComponents.Last().AllTag + ", " + item.Tag;
-                        _listStringTableListComponents.Last().Count++;
-                    }
-                    else
-                    {
-                        _listStringTableListComponents.Add(new StringTableListComponents()
-                        {
-                            IdBlock = new List<ObjectId>() { item.IdBlock },
-                            PosItem = posItem,
-                            AllTag = item.Tag,
-                            FullDescription = item.Description,
-                            Count = 1,
-                            Note = item.Note
-                        });
-                        posItem++;
-                        tempDicript = item.Description;
-                        tempNote = item.Note;
-                    }
-                }
-            }
+            _listStringTableListComponents = _listBlockForListComponents.Where(item => item.InSpecification)
+               .GroupBy(p => new { p.Description, p.Note })
+               .Select(b => new StringTableListComponents
+               {
+                   IdBlock = b.Select(bn => bn.IdBlock).ToList(),
+                   AllTag = String.Join(", ", b.Select(bn => bn.Tag)),
+                   FullDescription = b.Select(bn => bn.Description).First(),
+                   Count = b.Count(),
+                   Note = b.Select(bn => bn.Note).First(),
+                   PosItem = posItem++
+               }).ToList();
         }
 
         public void SyncBlocksPosItemAttr(Database db)

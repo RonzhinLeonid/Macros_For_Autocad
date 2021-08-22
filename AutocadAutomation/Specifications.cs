@@ -33,8 +33,8 @@ namespace AutocadAutomation
 
             var tableListComponents = new TableListComponents(db);
             tableListComponents.GetTableListComponents();
-            var listComponents = tableListComponents.ListStringTableListComponents;
-            if (!listComponents.Any())
+            var listStringTable = tableListComponents.ListStringTableListComponents;
+            if (!listStringTable.Any())
             {
                 MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -52,7 +52,7 @@ namespace AutocadAutomation
             }
             else
                 return;
-            Tables.CrateTableComponents(adoc, db, listComponents, point);
+            Tables.CrateTableComponents(adoc, db, listStringTable, point);
         }
 
         [CommandMethod("EditListComponents")]
@@ -169,6 +169,58 @@ namespace AutocadAutomation
             TubeConnections window = new TubeConnections(data);
             if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
                 tableTubeСonnections.SyncBlocksAllAttr(db, data.Collect);
+        }
+        #endregion
+
+        #region Общая спецификация
+        [CommandMethod("CreateTableGeneralSpecification")]
+        public void CreateTableGeneralSpecification_Method()
+        {
+            db = adoc.Database;
+            ed = adoc.Editor;
+
+            var tableGeneralSpecification = new TableGeneralSpecification(db);
+            tableGeneralSpecification.GetTableGeneralSpecification();
+
+            var listStringTable = tableGeneralSpecification.ListStringTableGeneralSpecification;
+
+            if (!listStringTable.Any())
+            {
+                MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            tableGeneralSpecification.SyncBlocksPosItemAttr(db);
+
+            Point3d point;
+            var po = new PromptPointOptions("\nУкажите точку вставки таблицы.") { AllowNone = false };
+            var r = ed.GetPoint(po);
+            if (r.Status == PromptStatus.OK)
+                point = r.Value;
+            else if (r.Status == PromptStatus.Cancel)
+            {
+                return;
+            }
+            else
+                return;
+            Tables.CrateTableGeneralSpecification(adoc, db, listStringTable, point);
+        }
+
+        [CommandMethod("EditListGeneralSpecification")]
+        public void EditListGeneralSpecification_Method()
+        {
+            db = adoc.Database;
+            ed = adoc.Editor;
+
+            var tableGeneralSpecification = new TableGeneralSpecification(db);
+            if (!tableGeneralSpecification.ListBlockForGeneralSpecification.Any())
+            {
+                MessageBox.Show($"Блоков для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            DataTableGeneralSpecification data = new DataTableGeneralSpecification() { Collect = new ObservableCollection<BlockForGeneralSpecification>(tableGeneralSpecification.ListBlockForGeneralSpecification) };
+            GeneralSpecification window = new GeneralSpecification(data);
+            if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
+                tableGeneralSpecification.SyncBlocksAllAttr(db, data.Collect);
         }
         #endregion
     }
