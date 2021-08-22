@@ -47,6 +47,10 @@ namespace AutocadAutomation.TypeBlocks
             component.Add("POS_ITEM", 0);
             component.Add("DESCRIPTION", 0);
             component.Add("PARAMETR1", 0);
+            component.Add("PARAMETR2", 0);
+            component.Add("PARAMETR3", 0);
+            component.Add("PARAMETR4", 0);
+            component.Add("PARAMETR5", 0);
             component.Add("CAT_NUMBER", 0);
             component.Add("MANUFACTURER", 0);
             component.Add("MASS", 0);

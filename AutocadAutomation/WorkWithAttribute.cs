@@ -10,7 +10,8 @@ namespace AutocadAutomation
     static class WorkWithAttribute
     {
         static public Dictionary<string, int> FillDictionaryAttributes(AttributeCollection attrC, Dictionary<string, int> dictionaryBlock)
-        {
+        { 
+            //var dictionaryBlock = new Dictionary<string, int>();
             foreach (ObjectId idAtrRef in attrC)
             {
                 using (var atrRef = idAtrRef.GetObject(OpenMode.ForRead) as AttributeReference)
@@ -19,6 +20,8 @@ namespace AutocadAutomation
                     {
                         if (dictionaryBlock.ContainsKey(atrRef.Tag))
                             dictionaryBlock[atrRef.Tag] = 1;
+                        else
+                            dictionaryBlock.Add(atrRef.Tag, 0);
                     }
                 }
             }
@@ -43,24 +46,5 @@ namespace AutocadAutomation
             }
             return dictionartAttribute;
         }
-
-        //static public List<string> GetListParams(AttributeCollection attrC)
-        //{
-        //    List<string> rez = new List<string>;
-        //    foreach (ObjectId idAtrRef in attrC)
-        //    {
-        //        using (var atrRef = idAtrRef.GetObject(OpenMode.ForRead) as AttributeReference)
-        //        {
-        //            if (atrRef != null)
-        //            {
-        //                if (dictionaryBlock.ContainsKey(atrRef.Tag))
-        //                    dictionaryBlock[atrRef.Tag] = 1;
-
-        //                dictionartAttribute.Add(atrRef.Tag, atrRef.TextString);
-        //            }
-        //        }
-        //    }
-        //    throw new NotImplementedException();
-        //}
     }
 }

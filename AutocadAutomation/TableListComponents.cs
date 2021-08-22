@@ -73,55 +73,6 @@ namespace AutocadAutomation
                    Note = b.Select(bn => bn.Note).First(),
                    PosItem = posItem++
                }).ToList();
-
-
-            //int posItem = 1;
-            //string tempDicript = "";
-            //string tempNote = "";
-            //_listStringTableListComponents = new List<StringTableListComponents>();
-            //foreach (var item in _listBlockForListComponents)
-            //{
-            //    if (!item.InSpecification) continue;
-            //    if (tempDicript != item.Description)
-            //    {
-            //        _listStringTableListComponents.Add(new StringTableListComponents()
-            //        {
-            //            IdBlock = new List<ObjectId>() { item.IdBlock },
-            //            PosItem = posItem,
-            //            AllTag = item.Tag,
-            //            FullDescription = item.Description,
-            //            Count = 1,
-            //            Note = item.Note
-            //        });
-            //        posItem++;
-            //        tempDicript = item.Description;
-            //        tempNote = item.Note;
-            //    }
-            //    else
-            //    {
-            //        if (tempNote == item.Note)
-            //        {
-            //            _listStringTableListComponents.Last().IdBlock.Add(item.IdBlock);
-            //            _listStringTableListComponents.Last().AllTag = _listStringTableListComponents.Last().AllTag + ", " + item.Tag;
-            //            _listStringTableListComponents.Last().Count++;
-            //        }
-            //        else
-            //        {
-            //            _listStringTableListComponents.Add(new StringTableListComponents()
-            //            {
-            //                IdBlock = new List<ObjectId>() { item.IdBlock },
-            //                PosItem = posItem,
-            //                AllTag = item.Tag,
-            //                FullDescription = item.Description,
-            //                Count = 1,
-            //                Note = item.Note
-            //            });
-            //            posItem++;
-            //            tempDicript = item.Description;
-            //            tempNote = item.Note;
-            //        }
-            //    }
-            //}
         }
 
         public void SyncBlocksPosItemAttr(Database db)
