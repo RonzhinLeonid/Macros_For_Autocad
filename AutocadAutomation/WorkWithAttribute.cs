@@ -11,7 +11,6 @@ namespace AutocadAutomation
     {
         static public Dictionary<string, int> FillDictionaryAttributes(AttributeCollection attrC, Dictionary<string, int> dictionaryBlock)
         { 
-            //var dictionaryBlock = new Dictionary<string, int>();
             foreach (ObjectId idAtrRef in attrC)
             {
                 using (var atrRef = idAtrRef.GetObject(OpenMode.ForRead) as AttributeReference)
