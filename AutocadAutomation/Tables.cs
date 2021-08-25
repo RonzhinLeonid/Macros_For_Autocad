@@ -31,6 +31,9 @@ namespace AutocadAutomation
         private const string tableGeneralSpecificationStyleName = "Общая спецификация";
         private const int startRowTableGeneralSpecification = 2;
 
+        private const string tablerElecticSignalStyleName = "Электрические сигналы";
+        private const int startRowTablerElecticSignal = 2;
+
         public static void CrateTableComponents(Document adoc, Database db, List<StringTableListComponents> listComponents, Point3d point)
         {
             using (adoc.LockDocument())
@@ -307,6 +310,73 @@ namespace AutocadAutomation
                                 tableInstance.Cells[row, 1].Style = cellStyle;
                             row++;
                             tempManufac = item.Manufac;
+                        }
+                        tr.Commit();
+                    }
+                }
+            }
+        }
+
+        public static void CrateTableElecticSignal(Document adoc, Database db, List<BlockForElecticSignal> listComponents, Point3d point)
+        {
+            using (adoc.LockDocument())
+            {
+                using (Transaction tr = db.TransactionManager.StartTransaction())
+                {
+                    DBDictionary dict = tr.GetObject(db.TableStyleDictionaryId, OpenMode.ForRead) as DBDictionary;
+                    if (!dict.Contains(tablerElecticSignalStyleName))   //необходимо переделать проверку, если нужного шаблона нет, то запустить метод по созданию этого шаблона
+                    {
+                        MessageBox.Show($"Проверьте шаблон чертежа. Стиль таблицы \"{tablerElecticSignalStyleName}\" отсутствует!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else
+                    {
+                        TableStyle ts = tr.GetObject(dict.GetAt(tablerElecticSignalStyleName), OpenMode.ForRead) as TableStyle;
+                        string[] cellStyles = ts.CellStyles.Cast<string>().ToArray();
+                        string cellStyle = cellStyles.FirstOrDefault(item => item.ToLower().Contains(tableComponentStyleCell.ToLower()));
+
+                        TableTemplate template;
+                        try
+                        {
+                            template = tr.GetObject(ts.Template, OpenMode.ForRead) as TableTemplate;
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show($"Проверьте стиль таблицы. нет привязки к таблице", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        // Включим отображение толщин линий,
+                        // дабы увидеть результат нашей работы
+                        //cad.SetSystemVariable("LWDISPLAY", 1);
+                        // Создаём новую таблицу, на основе
+                        // созданного нами шаблона.
+                        Table tableInstance = new Table();
+                        tableInstance.CopyFrom(template, TableCopyOptions.FillTarget);
+                        tableInstance.GenerateLayout();
+                        tableInstance.Position = point;
+                        BlockTable bt = tr.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+                        BlockTableRecord modelSpace = tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+                        modelSpace.AppendEntity(tableInstance);
+                        tr.AddNewlyCreatedDBObject(tableInstance, true);
+                        if (tableInstance.Rows.Count > startRowTablerElecticSignal)
+                            tableInstance.DeleteRows(startRowTablerElecticSignal, tableInstance.Rows.Count - startRowTablerElecticSignal);
+
+                        tableInstance.InsertRows(startRowTablerElecticSignal, 8, listComponents.Count);
+                        int row = startRowTablerElecticSignal;
+                        foreach (var item in listComponents)
+                        {
+                            if (item.InSpecification)
+                            {
+                                tableInstance.Cells[row, 0].TextString = item.Tag;
+                                tableInstance.Cells[row, 1].TextString = item.Description;
+                                tableInstance.Cells[row, 2].TextString = item.Terminal;
+                                tableInstance.Cells[row, 3].TextString = $"{item.CableGland} {item.Note2}";
+                                if (!string.IsNullOrEmpty(cellStyle))
+                                    tableInstance.Cells[row, 1].Style = cellStyle;
+                                row++;
+                            }
+                            else
+                                tableInstance.DeleteRows(tableInstance.Rows.Count - 1, 1);
                         }
                         tr.Commit();
                     }

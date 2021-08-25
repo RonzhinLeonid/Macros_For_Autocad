@@ -132,8 +132,8 @@ namespace AutocadAutomation
 
             var tableTubeСonnections = new TableTubeConnections(db);
 
-            var listCables = tableTubeСonnections.ListBlockForTubeСonnections;
-            if (!listCables.Any())
+            var listTubeСonnections = tableTubeСonnections.ListBlockForTubeСonnections;
+            if (!listTubeСonnections.Any())
             {
                 MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -150,7 +150,7 @@ namespace AutocadAutomation
             }
             else
                 return;
-            Tables.CrateTableTubeСonnections(adoc, db, listCables, point);
+            Tables.CrateTableTubeСonnections(adoc, db, listTubeСonnections, point);
         }
 
         [CommandMethod("EditListTubeСonnections")]
@@ -162,7 +162,7 @@ namespace AutocadAutomation
             var tableTubeСonnections = new TableTubeConnections(db);
             if (!tableTubeСonnections.ListBlockForTubeСonnections.Any())
             {
-                MessageBox.Show($"Кабелей для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Компонентов для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             DataTableTubeConnections data = new DataTableTubeConnections() { Collect = new ObservableCollection<BlockForTubeСonnections>(tableTubeСonnections.ListBlockForTubeСonnections) };
@@ -221,6 +221,55 @@ namespace AutocadAutomation
             GeneralSpecification window = new GeneralSpecification(data);
             if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
                 tableGeneralSpecification.SyncBlocksAllAttr(db, data.Collect);
+        }
+        #endregion
+
+        #region Электрические сигналы
+        [CommandMethod("CreateTableElectricSignal")]
+        public void CreateTableElectricSignal_Method()
+        {
+            db = adoc.Database;
+            ed = adoc.Editor;
+
+            var tableTubeСonnections = new TableElectricSignal(db);
+
+            var listCables = tableTubeСonnections.ListBlockForElectricSignal;
+            if (!listCables.Any())
+            {
+                MessageBox.Show($"Компонентов для создания таблицы не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Point3d point;
+            var po = new PromptPointOptions("\nУкажите точку вставки таблицы.") { AllowNone = false };
+            var r = ed.GetPoint(po);
+            if (r.Status == PromptStatus.OK)
+                point = r.Value;
+            else if (r.Status == PromptStatus.Cancel)
+            {
+                return;
+            }
+            else
+                return;
+            Tables.CrateTableElecticSignal(adoc, db, listCables, point);
+        }
+
+        [CommandMethod("EditListElectricSignal")]
+        public void EditListElectricSignal_Method()
+        {
+            db = adoc.Database;
+            ed = adoc.Editor;
+
+            var tableElectricSignal = new TableElectricSignal(db);
+            if (!tableElectricSignal.ListBlockForElectricSignal.Any())
+            {
+                MessageBox.Show($"Компонентов для редактирования не обнаружено!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            var data = new DataTableElecticSignal() { Collect = new ObservableCollection<BlockForElecticSignal>(tableElectricSignal.ListBlockForElectricSignal) };
+            var window = new ElectricSignal(data);
+            if (Autodesk.AutoCAD.ApplicationServices.Application.ShowModalWindow(window) == true)
+                tableElectricSignal.SyncBlocksAllAttr(db, data.Collect);
         }
         #endregion
     }
