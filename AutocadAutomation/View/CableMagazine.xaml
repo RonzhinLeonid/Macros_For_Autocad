@@ -30,6 +30,8 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
             <Button Name="btnSort" Content="Пронумеровать кабели" Margin="2" Command="{Binding RenameCableCommand}" />
+            <Label Content="Дельты для сортировки кабелей:"/>
+            <TextBox Text="{Binding Path=Delta}" Width="100"/>
         </StackPanel>
         <DataGrid Grid.Row="2" ItemsSource="{Binding Collect, Mode=TwoWay}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False">
             <DataGrid.Columns>
