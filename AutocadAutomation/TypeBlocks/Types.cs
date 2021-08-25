@@ -58,5 +58,17 @@ namespace AutocadAutomation.TypeBlocks
             component.Add("IN_SPECIFICATION", 0);
             return component;
         }
+        static public Dictionary<string, int> GetDictionaryElectricSignal()
+        {
+            var component = new Dictionary<string, int>();
+            component.Add("TAG", 0);
+            component.Add("DESCRIPTION", 0);
+            component.Add("TERMINAL", 0);
+            component.Add("CABLE_GLAND", 0);
+            component.Add("NOTE1", 0);
+            component.Add("NOTE2", 0);
+            component.Add("IN_SPECIFICATION", 0);
+            return component;
+        }
     }
 }

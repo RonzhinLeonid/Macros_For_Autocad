@@ -60,8 +60,8 @@ namespace AutocadAutomation
                 }
             }
             _listBlockForGeneralSpecification = _listBlockForGeneralSpecification.OrderBy(u => u.Manufac)
-                                                                     .ThenBy(u => u.CatNumber)
                                                                      .ThenBy(u => SortCable.PadNumbers(u.Tag))
+                                                                     .ThenBy(u => u.CatNumber)
                                                                      .ToList();
         }
 
@@ -70,7 +70,7 @@ namespace AutocadAutomation
             _listStringTableGeneralSpecification = _listBlockForGeneralSpecification.Where(item => item.InSpecification)
                .GroupBy(p => new { p.Manufac, p.CatNumber, p.Note })
                .Select(b => new StringTableGeneralSpecification {   IdBlock = b.Select(bn => bn.IdBlock).ToList(),
-                                                                    AllTag = String.Join(", ", b.Select(bn => bn.Tag)),
+                                                                    AllTag = String.Join(", ", b.Select(bn => bn.Tag)).Trim(' ', ','),
                                                                     FullDescription = String.Join(", ", b.Select(par => new List<string>() {par.Description,
                                                                                                                                             par.Parametr1, 
                                                                                                                                             par.Parametr2, 
