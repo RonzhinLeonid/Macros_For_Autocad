@@ -9,11 +9,17 @@ namespace AutocadAutomation.Data
 {
     class ComparerCoordinatesWithDelta : IComparer<double>
     {
+        int _delta;
+        public ComparerCoordinatesWithDelta(int delta)
+        {
+            _delta = delta;
+        }
+
         public int Compare(double x, double y)
         {
-            if (x < y - 10)
+            if (x < y - _delta)
                 return (-1);
-            else if (x > y + 10)
+            else if (x > y + _delta)
                 return (1);
             else
                 return (0);

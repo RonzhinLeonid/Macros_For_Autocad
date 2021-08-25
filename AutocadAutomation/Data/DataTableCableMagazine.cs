@@ -17,6 +17,7 @@ namespace AutocadAutomation.Data
     {
         private ObservableCollection<BlockForCableMagazine> _collect;
         private Options _options = Options.NonSortCoordinates;
+        private int _delta = 5;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -27,7 +28,15 @@ namespace AutocadAutomation.Data
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
+        public int Delta
+        {
+            get { return _delta; }
+            set
+            {
+                _delta = value;
+                OnPropertyChanged("Delta");
+            }
+        }
         public Options Option
         {
             get { return _options; }
@@ -62,55 +71,55 @@ namespace AutocadAutomation.Data
             {
                 return new DelegateCommand((p) =>
                 {
-                    SortCollection();
+                    SortCollection(Delta);
                 },
                 (p) => true);
             }
         }
 
-        private void SortCollection()
+        private void SortCollection(int delta)
         {
             ObservableCollection<BlockForCableMagazine> tempCollect;
             switch (_options)
             {
                 case Options.LeftRightUpDown:
-                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderByDescending(u => u.Position.Y, new ComparerCoordinatesWithDelta())
-                                                                                            .ThenBy(u => u.Position.X, new ComparerCoordinatesWithDelta()));
+                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderByDescending(u => u.Position.Y, new ComparerCoordinatesWithDelta(delta))
+                                                                                            .ThenBy(u => u.Position.X, new ComparerCoordinatesWithDelta(delta)));
                     NumerableCollection(tempCollect);
                     break;
                 case Options.LeftRightDownUp:
-                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderBy(u => u.Position.Y, new ComparerCoordinatesWithDelta())
-                                                                                            .ThenBy(u => u.Position.X, new ComparerCoordinatesWithDelta()));
+                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderBy(u => u.Position.Y, new ComparerCoordinatesWithDelta(delta))
+                                                                                            .ThenBy(u => u.Position.X, new ComparerCoordinatesWithDelta(delta)));
                     NumerableCollection(tempCollect);
                     break;
                 case Options.RightLeftUpDown:
-                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderByDescending(u => u.Position.Y, new ComparerCoordinatesWithDelta())
-                                                                                            .ThenByDescending(u => u.Position.X, new ComparerCoordinatesWithDelta()));
+                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderByDescending(u => u.Position.Y, new ComparerCoordinatesWithDelta(delta))
+                                                                                            .ThenByDescending(u => u.Position.X, new ComparerCoordinatesWithDelta(delta)));
                     NumerableCollection(tempCollect);
                     break;
                 case Options.RightLeftDownUp:
-                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderBy(u => u.Position.Y, new ComparerCoordinatesWithDelta())
-                                                                                            .ThenByDescending(u => u.Position.X, new ComparerCoordinatesWithDelta()));
+                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderBy(u => u.Position.Y, new ComparerCoordinatesWithDelta(delta))
+                                                                                            .ThenByDescending(u => u.Position.X, new ComparerCoordinatesWithDelta(delta)));
                     NumerableCollection(tempCollect);
                     break;
                 case Options.UpDownLeftRight:
-                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderBy(u => u.Position.X, new ComparerCoordinatesWithDelta())
-                                                                                            .ThenByDescending(u => u.Position.Y, new ComparerCoordinatesWithDelta()));
+                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderBy(u => u.Position.X, new ComparerCoordinatesWithDelta(delta))
+                                                                                            .ThenByDescending(u => u.Position.Y, new ComparerCoordinatesWithDelta(delta)));
                     NumerableCollection(tempCollect);
                     break;
                 case Options.UpDownRightLeft:
-                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderByDescending(u => u.Position.X, new ComparerCoordinatesWithDelta())
-                                                                                            .ThenByDescending(u => u.Position.Y, new ComparerCoordinatesWithDelta()));
+                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderByDescending(u => u.Position.X, new ComparerCoordinatesWithDelta(delta))
+                                                                                            .ThenByDescending(u => u.Position.Y, new ComparerCoordinatesWithDelta(delta)));
                     NumerableCollection(tempCollect);
                     break;
                 case Options.DownUpLeftRight:
-                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderBy(u => u.Position.X, new ComparerCoordinatesWithDelta())
-                                                                                            .ThenBy(u => u.Position.Y, new ComparerCoordinatesWithDelta()));
+                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderBy(u => u.Position.X, new ComparerCoordinatesWithDelta(delta))
+                                                                                            .ThenBy(u => u.Position.Y, new ComparerCoordinatesWithDelta(delta)));
                     NumerableCollection(tempCollect);
                     break;
                 case Options.DownUpRightLeft:
-                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderByDescending(u => u.Position.X, new ComparerCoordinatesWithDelta())
-                                                                                            .ThenBy(u => u.Position.Y, new ComparerCoordinatesWithDelta()));
+                    tempCollect = new ObservableCollection<BlockForCableMagazine>(Collect.OrderByDescending(u => u.Position.X, new ComparerCoordinatesWithDelta(delta))
+                                                                                            .ThenBy(u => u.Position.Y, new ComparerCoordinatesWithDelta(delta)));
                     NumerableCollection(tempCollect);
                     break;
                 case Options.NonSortCoordinates:
